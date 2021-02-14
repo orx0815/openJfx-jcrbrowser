@@ -1,0 +1,15 @@
+.root{
+    -fx-font-size: 12pt;
+    -fx-font-family: "Tahoma";
+    -fx-base: #DFB951;
+    -fx-background: #A78732;
+    -fx-focus-color: #B6A678;
+}
+
+.buttonStyle {
+    -fx-text-fill: #006464;
+    -fx-background-color: #DFB951;
+    -fx-border-radius: 30;
+    -fx-background-radius: 20;
+    -fx-padding: 5;
+}

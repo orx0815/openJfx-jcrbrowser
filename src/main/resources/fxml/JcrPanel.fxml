@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.HBox?>
+
+<SplitPane dividerPositions="0.801980198019802" maxHeight="1.7976931348623157E308" orientation="VERTICAL" prefWidth="200.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="org.motorbrot.javafxjcrbrowser.jcrpanel.JcrPanelController">
+   <items>
+      <TreeView fx:id="fxTree" prefHeight="481.0" prefWidth="668.0" />
+      <HBox prefHeight="100.0">
+         <children>
+            <TableView fx:id="nodePropsTable" minHeight="83.0" prefHeight="136.0" HBox.hgrow="ALWAYS">
+               <columns>
+                  <TableColumn fx:id="propertyName" minWidth="133.0" prefWidth="153.0" text="Node Properties" />
+                  <TableColumn fx:id="propertyValue" maxWidth="1.7976931348623157E308" minWidth="50.0" prefWidth="1000.0" text="Value" />
+               </columns>
+            </TableView>
+         </children>
+      </HBox>
+   </items>
+</SplitPane>

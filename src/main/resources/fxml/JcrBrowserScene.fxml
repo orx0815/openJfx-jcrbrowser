@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.motorbrot.javafxjcrbrowser.JcrBrowserSceneController">
+  <children>
+      <MenuBar>
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="no" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <HBox maxHeight="-Infinity" prefHeight="28.0" spacing="10.0" VBox.vgrow="NEVER">
+         <children>
+            <Label prefHeight="26.0" prefWidth="100.0" text="crx User:">
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </Label>
+            <TextField fx:id="usernameField" prefHeight="26.0" prefWidth="182.0" promptText="username" text="admin" />
+            <Label prefHeight="26.0" prefWidth="72.0" text="Passwd:" />
+            <PasswordField fx:id="passwdField" text="admin" />
+            <Label prefHeight="26.0" prefWidth="95.0" text="Workspace:">
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+            </Label>
+            <TextField fx:id="workSpaceField" prefHeight="28.0" prefWidth="137.0" promptText="username" text="default" />
+            <Label prefHeight="26.0" prefWidth="175.0" text="e.g 'default' or 'crx.default'" />
+            <Region prefHeight="28.0" prefWidth="52.0" HBox.hgrow="ALWAYS" />
+            <Button fx:id="loginButton" contentDisplay="TOP" mnemonicParsing="false" onAction="#loginButtonPressed" text="Login">
+               <HBox.margin>
+                  <Insets right="20.0" />
+               </HBox.margin>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </Button>
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin>
+      </HBox>
+      <HBox maxHeight="-Infinity" prefHeight="28.0" prefWidth="1191.0" spacing="10.0" VBox.vgrow="NEVER">
+         <children>
+            <Label prefHeight="26.0" prefWidth="100.0" text="Repo-URL:">
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </Label>
+            <TextField fx:id="jcrUrlField" prefHeight="26.0" prefWidth="482.0" promptText="username" text="http://localhost:8080/server" />
+            <Label prefHeight="26.0" prefWidth="460.0" text="e.g http://localhost:8080/server or http://localhost:4502/crx/server" />
+         </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </HBox>
+      <HBox maxHeight="-Infinity" prefHeight="28.0" prefWidth="200.0" spacing="10.0" VBox.vgrow="NEVER">
+         <children>
+            <Label prefHeight="26.0" prefWidth="100.0" text="Root-Path:">
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </Label>
+            <TextField fx:id="rootPathField" onAction="#rootPathSet" prefHeight="26.0" prefWidth="1038.0" promptText="passwd" text="/content" HBox.hgrow="ALWAYS">
+               <HBox.margin>
+                  <Insets right="20.0" />
+               </HBox.margin>
+            </TextField>
+         </children>
+         <VBox.margin>
+            <Insets bottom="20.0" />
+         </VBox.margin>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </HBox>
+    <SplitPane dividerPositions="0.25041736227045075" focusTraversable="true" prefHeight="880.0" prefWidth="1062.0" VBox.vgrow="ALWAYS">
+      <items>
+            <fx:include fx:id="jcrPanel" source="JcrPanel.fxml" />
+            <SplitPane dividerPositions="0.8013888888888889" orientation="VERTICAL" prefHeight="722.0" prefWidth="823.0">
+              <items>
+                  <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+                    <tabs>
+                      <Tab text="DAM-View">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <ImageView fx:id="damImageView" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                      </Tab>
+                      <Tab text="Csv">
+                        <content>
+                          <fx:include fx:id="csvTab" source="CsvTab.fxml" />
+                        </content>
+                      </Tab>
+                      <Tab text="Bling">
+                        <content>
+                          <fx:include fx:id="blingTab" source="BlingTab.fxml" />
+                        </content>
+                      </Tab>
+                      <Tab text="XML Export">
+                        <content>
+                          <fx:include fx:id="xmlExportTab" source="XmlExportTab.fxml" />
+                        </content>
+                      </Tab>
+                    </tabs>
+                  </TabPane>
+                  <TextArea fx:id="debugTxt" editable="false" minHeight="0.0" wrapText="true" />
+              </items>
+            </SplitPane>
+      </items>
+    </SplitPane>
+  </children>
+</VBox>

@@ -1,0 +1,769 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.motorbrot</groupId>
+  <artifactId>openjfx-jcr-browser</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>OpenJfxJcrBrowser</name>
+  <description>Proof of Concept about Fat-Client Jcr CRUD</description>
+  
+  <organization>
+    <name>motorbrot.org</name>
+    <url>http://motorbrot.org</url>
+  </organization>
+  
+  <!-- used in generated jnlp -->
+  <url>http://motorbrot.org/404</url>
+
+  <parent>
+    <groupId>io.wcm.maven</groupId>
+    <artifactId>io.wcm.maven.global-parent</artifactId>
+    <version>36</version>
+    <relativePath />
+  </parent>
+    
+  <properties>
+    <java.version>11</java.version>
+    <mainClassName>org.motorbrot.javafxjcrbrowser.Main</mainClassName>
+    <openjfx.version>15.0.1</openjfx.version>
+    <jackrabbit.version>2.21.5</jackrabbit.version>
+    <springboot.version>2.4.1</springboot.version>
+  </properties>
+  
+  <build>
+    <plugins>
+
+      <!-- Run the app with 'mvn exec:java' -->          
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.6.0</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>java</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>Build Native Runtime Image Package with jpackage</id>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <mainClass>${mainClassName}</mainClass>
+          
+          <!-- variables passed to scripts in "Runtime Image Generation" build-* profiles -->
+          <environmentVariables>
+            <NAME>${project.name}</NAME>
+            <MAIN_CLASS>${mainClassName}</MAIN_CLASS>
+            <ARTEFACT_ID>${project.artifactId}</ARTEFACT_ID>
+            <APP_VERSION>
+              <!-- windows installer does not like -SNAPSHOP in version -->
+              ${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}
+            </APP_VERSION>
+            <PROJECT_VERSION>
+              ${project.version}
+            </PROJECT_VERSION>
+            <JAVA_VERSION>${java.version}</JAVA_VERSION>
+            <VENDOR>${project.organization.name}</VENDOR>
+            <COPYRIGHT>Copyright © 2021-22 ${project.organization.name}.</COPYRIGHT>
+          </environmentVariables>
+        </configuration>
+      </plugin>
+      
+      <!-- Test the app with 'mvn test' --> 
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <!-- 
+             Comment out the following systemPropertyVariables, if you want to see unitTest on the desktop in action.
+             Stealing the mouse or locking the screen during execution will fail the test. 
+          -->
+          <systemPropertyVariables>
+            <java.awt.headless>true</java.awt.headless>
+            <testfx.robot>glass</testfx.robot>
+            <testfx.headless>true</testfx.headless>
+            <prism.order>sw</prism.order>
+            <prism.text>t2k</prism.text>
+          </systemPropertyVariables>
+        
+        </configuration>
+      </plugin>
+      
+  <!-- ====================================================================== -->
+  <!-- D I S T R I B U T I O N - jars, installers, apps, packages             -->
+  <!-- ====================================================================== -->  
+  
+      <!-- Excecutable jar with Maven Shade Plugin to generate an uber.jar with all dependencies included.
+            'java -jar target/openjfx-jcr-browser-1.0-SNAPSHOT-uber.jar'
+      -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.2.4</version>
+        <executions>
+          <!-- Run shade goal on package phase -->
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+                    
+              <shadedArtifactAttached>true</shadedArtifactAttached>
+              <shadedClassifierName>uber</shadedClassifierName>
+                    
+              <transformers>
+                <!-- add Main-Class to manifest file -->
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>${mainClassName}</mainClass>
+                </transformer>
+
+                <!--  each ImageIO plugin JAR contains multiple resources under META-INF/services.
+                These resources are needed for automatic discovery of the ImageIO plugins.
+                When you unpack all the JAR files into a single folder, these will be overwritten for each JAR.
+                Instead, the resources with the same name needs to be merge into a new, single resource by ServicesResourceTransformer. -->
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                      
+                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                  <resource>META-INF/spring.handlers</resource>
+                </transformer>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                  <resource>META-INF/spring.schemas</resource>
+                </transformer>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                  <resource>META-INF/spring.factories</resource>
+                </transformer>
+
+              </transformers>
+              <createDependencyReducedPom>false</createDependencyReducedPom>
+
+              <!-- do not copy any (tika/bouncycastle) jar-signature files into uber.jar, as they cause
+              SecurityException: Invalid signature file digest for Manifest main attributes -->
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      
+      <!-- 2) same but spring-plugin with better jar-layout
+           java -jar target/openjfx-jcr-browser-1.0-SNAPSHOT-fat.jar
+      -->
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>${springboot.version}</version>
+        <executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+        <configuration>
+          <finalName>${project.artifactId}-${project.version}-fat</finalName>
+          <mainClass>${mainClassName}</mainClass>
+          <layout>ZIP</layout>
+        </configuration>
+      </plugin>
+      
+      <!-- openjfx plugin: 'mvn javafx:run'
+           
+           Creating an application image with custom modular jvm via
+            'mvn javafx:jlink' 
+           will NOT work yet, as the project itself isn't modular due to non-modularized 3rd party dependencies
+      -->
+      <plugin>
+            <groupId>org.openjfx</groupId>
+          <artifactId>javafx-maven-plugin</artifactId>
+          <version>0.0.5</version>
+          <configuration>
+              <mainClass>${mainClassName}</mainClass>
+          </configuration>
+      </plugin>
+      
+      <!-- copy dependencies to libs for jdeps/jlink/jpackage "Runtime Image Generation" done in build-* profiles -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.1.1</version>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/libs</outputDirectory>
+              <includeScope>compile</includeScope>
+              <includeScope>runtime</includeScope>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      
+      <!-- skip because it requires git, might not be present -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>buildnumber-maven-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+      
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>parse-version</id>
+            <goals>
+              <goal>parse-version</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+    
+  </build>
+  
+  
+  <profiles>
+    
+    <profile>
+      <id>jnlp</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>webstart-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>jnlp</id>
+                <phase>package</phase>
+                <goals>
+                  <!-- using jnlp-single to avoid a forked build see: http://www.mojohaus.org/webstart/webstart-maven-plugin/faq.html -->
+                  <goal>jnlp-inline</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <updateManifestEntries>
+                <Permissions>all-permissions</Permissions>
+                <Codebase>*</Codebase>
+              </updateManifestEntries>
+              <excludeTransitive>false</excludeTransitive>
+
+              <!-- JNLP generation -->
+              <jnlp>
+                <!--inputTemplate>template-openjfx.vm</inputTemplate-->
+                <outputFile>OpenJfxJcrBrowser.jnlp</outputFile>
+    
+                <mainClass>${mainClassName}</mainClass>
+              </jnlp>
+              
+              <!-- SIGNING -->
+							<!-- automatically sign the jar and its dependencies, -->
+							<sign>
+								<alias>openwebstart</alias>
+								<arguments>
+									<!-- default SHA1 not acceptable anymore -->
+									<argument>-sigalg</argument>
+									<argument>SHA256withRSA</argument>
+									<!-- Timestamping  -->
+									<argument>-tsa</argument>
+									<argument>http://timestamp.digicert.com</argument>
+								</arguments>
+								<keystore>openwebstart.jks</keystore>
+								<keypass>changeit</keypass>
+								<storepass>changeit</storepass>
+
+								<verify>true</verify> 
+
+							</sign>
+
+            </configuration>
+          </plugin>
+          
+          <plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+            <configuration>
+              <skip>true</skip> <!-- gets confused with the fat-jar otherwise -->
+            </configuration>
+          </plugin>
+        </plugins>
+        
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>webstart-maven-plugin</artifactId>
+              <version>1.0-beta-7</version>
+              <dependencies>
+                <!-- https://mvnrepository.com/artifact/org.codehaus.mojo/keytool-api -->
+                <dependency>
+                  <groupId>org.codehaus.mojo</groupId>
+                  <artifactId>keytool-api-1.7</artifactId>
+                  <version>1.5</version>
+                </dependency>
+              </dependencies>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
+    </profile>
+          
+    
+        
+    <!-- inspired by https://github.com/dlemmermann/JPackageScriptFX -->    
+    <profile>
+      <id>build-deb</id>
+      <properties>
+        <!-- jdl14 is minimum, due to jpackage -->
+        <java.version>14</java.version>
+      </properties>
+      <build>
+        <plugins>
+          <!-- run the build_deb.sh for jlink/jpackage -->
+          <plugin>
+            <artifactId>exec-maven-plugin</artifactId>
+            <groupId>org.codehaus.mojo</groupId>
+            <executions>
+              <execution>
+                <id>Build Native .deb installer</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <executable>./jpackage_scripts/build_deb.sh</executable>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    
+    <profile>
+      <id>build-rpm</id>
+      <properties>
+        <!-- jdl14 is minimum, due to jpackage -->
+        <java.version>14</java.version>
+      </properties>
+      <build>
+        <plugins>
+          <!-- run the build_deb.sh for jlink/jpackage -->
+          <plugin>
+            <artifactId>exec-maven-plugin</artifactId>
+            <groupId>org.codehaus.mojo</groupId>
+            <executions>
+              <execution>
+                <id>Build Native .rmp installer</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <executable>./jpackage_scripts/build_rpm.sh</executable>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    
+    <profile>
+      <id>build-mac</id>
+      <properties>
+        <!-- jdl14 is minimum, due to jpackage -->
+        <java.version>14</java.version>
+      </properties>
+      <build>
+        <plugins>
+          <!-- run the build_deb.sh for jlink/jpackage -->
+          <plugin>
+            <artifactId>exec-maven-plugin</artifactId>
+            <groupId>org.codehaus.mojo</groupId>
+            <executions>
+              <execution>
+                <id>Build Native .dmg .pkg installer</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <executable>./jpackage_scripts/build_mac.sh</executable>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>build-win</id>
+      <properties>
+        <!-- jdl14 is minimum, due to jpackage -->
+        <java.version>14</java.version>
+      </properties>
+
+      <build>
+        <plugins>
+          
+          <!-- run the build_app.bat for jlink/jpackage -->
+          <plugin>
+            <artifactId>exec-maven-plugin</artifactId>
+            <groupId>org.codehaus.mojo</groupId>
+            <executions>
+              <execution>
+                <id>Build Native .msi installer</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <executable>./jpackage_scripts/build_app.bat</executable>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>    
+    
+    <profile>
+      <id>jpro</id>
+      <properties>
+        <jpro.version>2020.1.1</jpro.version>
+        <mainClassName>org.motorbrot.javafxjcrbrowser.JavaFxJcrBrowserApplication</mainClassName>
+      </properties>
+      <dependencies>
+        <dependency>
+          <groupId>com.sandec.jpro</groupId>
+          <artifactId>jpro-webapi</artifactId>
+          <version>${jpro.version}</version>
+          <scope>compile</scope>
+        </dependency>
+      </dependencies>
+      
+      <build>
+        <plugins>
+          
+          <!--  'mvn -Pjpro install' -->
+          <plugin>
+            <groupId>com.sandec.jpro</groupId>
+            <artifactId>jpro-maven-plugin</artifactId>
+            <version>${jpro.version}</version>
+            <configuration>
+              <visible>false</visible>
+              <JVMArgs>
+                <!-- <JVMArg>your-args</JVMArg> -->
+              </JVMArgs>
+              <mainClassName>${mainClassName}</mainClassName>
+              <openingPath>/</openingPath>
+            </configuration>
+          </plugin>
+          
+        
+        </plugins>
+      </build>
+      
+    </profile>
+    
+    <!-- WIP: Platform dependent graalvm-aot-compiled excecutable,
+         via  gluon's client-plugin 
+    -->
+    <profile>
+      <id>spring-graal</id>
+      <properties>
+        <java.version>11</java.version>
+      </properties>
+      <dependencies>
+        
+        <dependency>
+          <groupId>org.springframework.experimental</groupId>
+          <artifactId>spring-graalvm-native</artifactId>
+          <version>0.8.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <exclusions>
+                <!-- On purpose exclusion to test java.util.logging -->
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+                
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-indexer</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-configuration-processor</artifactId>
+          <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        
+        
+      </dependencies>
+      <build>
+        <plugins>
+          
+          <!--  'mvn -Pspring-graal client:build' -->
+          <plugin>
+            <groupId>com.gluonhq</groupId>
+            <artifactId>client-maven-plugin</artifactId>
+            <version>0.1.36</version>
+            <configuration>
+              <!-- Uncomment to run on iOS: -->
+              <!-- <target>ios</target>-->
+          
+              <reflectionList>
+                <list>javafx.fxml.FXMLLoader</list>
+                <list>org.motorbrot.javafxjcrbrowser.JavaFxJcrBrowserApplication</list>
+                <list>org.motorbrot.javafxjcrbrowser.JcrBrowserSceneController</list>
+                <list>org.motorbrot.javafxjcrbrowser.jcrpanel.JcrPanelController</list>
+                <list>org.motorbrot.javafxjcrbrowser.sdl.SdlTabController</list>
+                <list>org.motorbrot.javafxjcrbrowser.csv.CsvTabController</list>
+                <list>org.motorbrot.javafxjcrbrowser.bling.BlingTabController</list>
+
+                <list>javafx.geometry.Insets</list>
+                <list>javafx.scene.control.TreeView</list>
+                <list>javafx.scene.control.Button</list>
+                <list>javafx.scene.control.Label</list>
+                <list>javafx.scene.control.TabPane</list>
+                <list>javafx.scene.control.TextArea</list>
+                <list>javafx.scene.control.TextField</list>
+                <list>javafx.scene.control.TreeItem</list>
+                <list>javafx.scene.image.ImageView</list>
+                <list>javafx.scene.control.Accordion</list>
+                <list>javafx.scene.control.TitledPane</list>
+                <list>javafx.scene.control.ScrollBar</list>
+                <list>javafx.scene.control.TableColumn</list>
+                <list>javafx.scene.control.TableColumnBase</list>
+                <list>javafx.scene.control.TableView</list>
+                <list>javafx.scene.control.TreeCell</list>
+                <list>javafx.scene.control.Menu</list>
+                <list>javafx.scene.control.MenuBar</list>
+                <list>javafx.scene.control.MenuItem</list>
+                <list>javafx.scene.control.PasswordField</list>
+                <list>javafx.scene.control.SplitPane</list>
+                <list>javafx.scene.control.Tab</list>
+                <list>javafx.scene.layout.AnchorPane</list>
+                <list>javafx.scene.layout.HBox</list>
+                <list>javafx.scene.layout.Region</list>
+                <list>javafx.scene.layout.VBox</list>
+                <list>javafx.scene.control.Accordion</list>
+                <list>javafx.scene.control.ColorPicker</list>
+                <list>javafx.scene.layout.Pane</list>
+                <list>javafx.scene.layout.VBox</list>
+                  
+                <list>javafx.scene.layout.Priority</list>
+                <list>javafx.scene.control.ContentDisplay</list>
+                <list>com.sun.javafx.logging.PrintLogger</list>
+                <list>java.util.Calendar</list>
+            
+              </reflectionList>
+              <nativeImageArgs>
+                <nativeImageArg>--enable-http</nativeImageArg>
+                <nativeImageArg>--enable-https</nativeImageArg>
+                
+                <!-- https://github.com/oracle/graal/issues/2719 -->
+                <nativeImageArg>--initialize-at-build-time=com.sun.org.apache.xml.internal.serializer.ToXMLStream</nativeImageArg>
+              </nativeImageArgs>
+              
+              <mainClass>${mainClassName}</mainClass>
+            </configuration>
+          </plugin>
+          
+        </plugins>
+      </build>
+    </profile>
+    
+  </profiles>
+  
+  
+  <!-- ====================================================================== -->
+  <!-- D E P E N D E N C I E S -->
+  <!-- ====================================================================== -->  
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <!-- Import dependency management from Spring Boot -->
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${springboot.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+      
+    <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
+    
+    <!-- JCR and jackrabbit-jcr2dav -->    
+    <dependency>
+      <groupId>javax.jcr</groupId>
+      <artifactId>jcr</artifactId>
+      <version>2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.jackrabbit</groupId>
+      <artifactId>jackrabbit-jcr2dav</artifactId>
+      <version>${jackrabbit.version}</version>
+    </dependency>
+    <!-- following are dependencies of jcr2dav but need explicit version here. 
+         Otherwise sling.testing.jcr-mock will downgrade dependency -->
+    <dependency>
+      <groupId>org.apache.jackrabbit</groupId>
+      <artifactId>jackrabbit-jcr-commons</artifactId>
+      <version>${jackrabbit.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    
+    <!-- open-jfx -->
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-controls</artifactId>
+      <version>${openjfx.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-fxml</artifactId>
+      <version>${openjfx.version}</version>
+    </dependency>
+
+    <!-- for the application itself -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-csv</artifactId>
+      <version>1.8</version>
+    </dependency>
+    
+    <!-- Tests -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+        
+    <dependency>
+      <groupId>org.apache.sling</groupId>
+      <artifactId>org.apache.sling.testing.jcr-mock</artifactId>
+      <version>1.5.0</version>
+      <scope>test</scope>
+    </dependency>
+        
+    <dependency>
+      <groupId>org.testfx</groupId>
+      <artifactId>testfx-core</artifactId>
+      <version>4.0.16-alpha</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testfx</groupId>
+      <artifactId>testfx-junit5</artifactId>
+      <version>4.0.16-alpha</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- If you wish to test in a headless environment your must add Monocle as a test dependency -->
+    <dependency>
+      <groupId>org.testfx</groupId>
+      <artifactId>openjfx-monocle</artifactId>
+      <!--version>jdk-11+26</version-->
+      <version>jdk-12.0.1+2</version>
+      <scope>test</scope>
+    </dependency>
+        
+  </dependencies>
+  
+  <pluginRepositories>
+    <pluginRepository>
+      <id>gluon-releases</id>
+      <url>http://nexus.gluonhq.com/nexus/content/repositories/releases/</url>
+    </pluginRepository>
+    <pluginRepository>
+      <id>Spring Milestones Repository</id>
+      <url>	https://repo.spring.io/milestone</url>
+    </pluginRepository>
+    <pluginRepository>
+      <id>jpro - sandec repository</id>
+      <url>https://sandec.bintray.com/repo</url>
+    </pluginRepository>
+  </pluginRepositories>
+   
+  <repositories>
+    <repository>
+      <id>jpro - sandec repository</id>
+      <url>https://sandec.bintray.com/repo</url>
+    </repository>
+    <repository>
+      <id>Spring Milestones Repository</id>
+      <url>https://repo.spring.io/milestone</url>
+    </repository>
+
+  </repositories>
+</project>
