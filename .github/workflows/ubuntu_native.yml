@@ -1,10 +1,7 @@
-name: Linux JAR and Native
+name: Linux BIN
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  workflow_dispatch
 
 jobs:
   build:
@@ -21,10 +18,10 @@ jobs:
       run: sudo apt install libasound2-dev libavcodec-dev libavformat-dev libavutil-dev libgl-dev libgtk-3-dev libpango1.0-dev libxtst-dev
     - name: Make staging directory
       run: mkdir staging
-    - name: Build JAR with Maven
-      run: mvn -B package
-    - name: Copy JAR to staging
-      run: cp target/*.jar staging
+#    - name: Build JAR with Maven
+#      run: mvn -B package
+#    - name: Copy JAR to staging
+#      run: cp target/*.jar staging
     - name: gluon client plugin build
       run: mvn -P spring-graal client:build
       env:
@@ -34,5 +31,5 @@ jobs:
     - name: Upload
       uses: actions/upload-artifact@v2
       with:
-        name: Package
+        name: linux_binary
         path: staging
