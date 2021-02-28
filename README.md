@@ -2,6 +2,13 @@
 
 ### Proof-of-concept maven build for java desktop-applications
 
+[![Windows MSI/EXE installers, executable jars (platform dependent)](https://github.com/orx0815/openJfx-jcrbrowser/actions/workflows/win_installer.yml/badge.svg)](https://github.com/orx0815/openJfx-jcrbrowser/actions/workflows/win_installer.yml)
+[![Windows EXE](https://github.com/orx0815/openJfx-jcrbrowser/actions/workflows/win_native.yml/badge.svg)](https://github.com/orx0815/openJfx-jcrbrowser/actions/workflows/win_native.yml)
+[![Mac PKG/DMG installers, executable jars (platform dependent)](https://github.com/orx0815/openJfx-jcrbrowser/actions/workflows/mac_installer.yml/badge.svg)](https://github.com/orx0815/openJfx-jcrbrowser/actions/workflows/mac_installer.yml)
+[![MacOS BIN](https://github.com/orx0815/openJfx-jcrbrowser/actions/workflows/mac_native.yml/badge.svg)](https://github.com/orx0815/openJfx-jcrbrowser/actions/workflows/mac_native.yml)
+[![Linux DEB/RPM installers, executable jars (platform dependent)](https://github.com/orx0815/openJfx-jcrbrowser/actions/workflows/linux_installer.yml/badge.svg)](https://github.com/orx0815/openJfx-jcrbrowser/actions/workflows/linux_installer.yml)
+[![Linux BIN](https://github.com/orx0815/openJfx-jcrbrowser/actions/workflows/linux_native.yml/badge.svg)](https://github.com/orx0815/openJfx-jcrbrowser/actions/workflows/linux_native.yml)
+
 This javaFX application itself is useless, it's just a PoC around the tooling - Rapid-Application-Development robot gui testing, springboot and deployment.
 
 This maven setup  generates a variety of deployment artifacts. It produces:
@@ -153,10 +160,11 @@ https://github.com/threerings/getdown
 https://github.com/edvin/fxlauncher
 
 ***
-## ToDo: github actions for win/mac/linux builds
+## github actions for win/mac/linux builds
 
-tbc
-
+When you're logged into GitHub, you can go to 
+ >Actions > Workflow_for_your_machine > last run > Artifacts
+and download the binary.
 
 
 ***

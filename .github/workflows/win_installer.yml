@@ -46,9 +46,9 @@ jobs:
     - name: Platform dependent fat/uber jars
       run: mkdir jar-staging
     - name: Copy JARs to staging
-      run: cp target/*.jar staging
+      run: cp target/*.jar jar-staging
     - name: Upload
       uses: actions/upload-artifact@v2
       with:
-        name: excecuteable jars mac
+        name: excecuteable jars windows
         path: jar-staging
