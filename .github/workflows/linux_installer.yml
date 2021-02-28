@@ -26,7 +26,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: linux .deb installer
-        path: staging
+        path: deb-staging
         
     - name: Make rpm-staging directory
       run: mkdir rpm-staging
@@ -36,7 +36,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: linux .rpm installer
-        path: staging    
+        path: rpm-staging    
         
     - name: Build plain fat/uber jars
       run: mvn clean package    
