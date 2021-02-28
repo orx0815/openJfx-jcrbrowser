@@ -488,7 +488,19 @@
         
         </plugins>
       </build>
-      
+      <pluginRepositories>
+        <pluginRepository>
+          <id>jpro - sandec repository</id>
+          <url>https://sandec.bintray.com/repo</url>
+        </pluginRepository>
+      </pluginRepositories>
+
+      <repositories>
+        <repository>
+          <id>jpro - sandec repository</id>
+          <url>https://sandec.bintray.com/repo</url>
+        </repository>
+      </repositories>
     </profile>
     
     <!-- WIP: Platform dependent graalvm-aot-compiled excecutable,
@@ -739,31 +751,5 @@
     </dependency>
         
   </dependencies>
-  
-  <pluginRepositories>
-    <pluginRepository>
-      <id>gluon-releases</id>
-      <url>http://nexus.gluonhq.com/nexus/content/repositories/releases/</url>
-    </pluginRepository>
-    <pluginRepository>
-      <id>Spring Milestones Repository</id>
-      <url>	https://repo.spring.io/milestone</url>
-    </pluginRepository>
-    <pluginRepository>
-      <id>jpro - sandec repository</id>
-      <url>https://sandec.bintray.com/repo</url>
-    </pluginRepository>
-  </pluginRepositories>
-   
-  <repositories>
-    <repository>
-      <id>jpro - sandec repository</id>
-      <url>https://sandec.bintray.com/repo</url>
-    </repository>
-    <repository>
-      <id>Spring Milestones Repository</id>
-      <url>https://repo.spring.io/milestone</url>
-    </repository>
 
-  </repositories>
 </project>
