@@ -17,3 +17,15 @@ jobs:
         java-version: 15
     - name: Build with jpackage scripts
       run: mvn -P build-win package
+    
+    - name: Make staging directory
+        run: mkdir staging
+    - name: Copy native msi to staging
+      run: cp -r target/installer/*.msi staging
+    - name: Copy native exe to staging
+      run: cp -r target/installer/*.exe staging  
+    - name: Upload
+      uses: actions/upload-artifact@v2
+      with:
+        name: windows installer
+        path: staging    

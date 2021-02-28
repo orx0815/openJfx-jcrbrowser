@@ -19,7 +19,7 @@ echo vendor: %VENDOR%
 echo copyright: %COPYRIGHT%
 
 rem Set desired installer type: "app-image" "msi" "exe".
-set INSTALLER_TYPE=msi
+set INSTALLER_TYPE=exe
 
 rem ------ SETUP DIRECTORIES AND FILES ----------------------------------------
 rem Remove previously generated java runtime and installers. Copy all required

@@ -17,3 +17,13 @@ jobs:
         java-version: 15
     - name: Build with Maven
       run: mvn -P build-deb package
+      
+    - name: Make staging directory
+        run: mkdir staging
+    - name: Copy native msi to staging
+      run: cp -r target/installer/*.deb staging
+    - name: Upload
+      uses: actions/upload-artifact@v2
+      with:
+        name: deb installer
+        path: staging      
