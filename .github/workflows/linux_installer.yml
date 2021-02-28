@@ -38,7 +38,9 @@ jobs:
         name: linux .rpm installer
         path: staging    
         
-    - name: Platform dependent fat/uber jars
+    - name: Build plain fat/uber jars
+      run: mvn clean package    
+    - name: upload platform dependent fat/uber jars
       run: mkdir jar-staging
     - name: Copy JARs to staging
       run: cp target/*.jar staging

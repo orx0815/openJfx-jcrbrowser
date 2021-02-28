@@ -23,7 +23,7 @@ jobs:
       
       
     # upload pkg
-    - name: Make pkg-staging director
+    - name: Make pkg-staging directory
       run: mkdir pkg-staging
     - name: Copy native msi to staging
       run: cp -r target/installer/*.pkg pkg-staging     
@@ -34,7 +34,7 @@ jobs:
         path: pkg-staging    
         
     # upload dmg    
-    - name: Make dmg-staging director
+    - name: Make dmg-staging directory
       run: mkdir dmg-staging  
     - name: Copy native dmg to staging
       run: cp -r target/installer/*.dmg dmg-staging    
@@ -43,9 +43,12 @@ jobs:
       with:
         name: mac .dmg installer
         path: dmg-staging
+        
+    - name: Build plain fat/uber jars
+      run: mvn clean package    
     
     # executable jars (platform dependent)    
-    - name: Platform dependent fat/uber jars
+    - name: upload platform dependent fat/uber jars
       run: mkdir jar-staging
     - name: Copy JARs to staging
       run: cp target/*.jar staging

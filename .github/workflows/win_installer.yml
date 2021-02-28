@@ -19,7 +19,7 @@ jobs:
       run: mvn -P build-win package
     
     # upload msi
-    - name: Make msi-staging director
+    - name: Make msi-staging directory
       run: mkdir msi-staging
     - name: Copy native msi to staging
       run: cp -r target/installer/*.msi msi-staging     
@@ -30,7 +30,7 @@ jobs:
         path: msi-staging    
         
     # upload setup.exe    
-    - name: Make exe-staging director
+    - name: Make exe-staging directory
       run: mkdir exe-staging  
     - name: Copy native exe to staging
       run: cp -r target/installer/*.exe exe-staging    
@@ -40,6 +40,8 @@ jobs:
         name: windows setup.exe style installer
         path: exe-staging
         
+    - name: Build plain fat/uber jars
+      run: mvn clean package    
     # executable jars (platform dependent)    
     - name: Platform dependent fat/uber jars
       run: mkdir jar-staging

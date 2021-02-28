@@ -97,7 +97,7 @@ call "%JAVA_HOME%\bin\jpackage" ^
 
 rem this creates a setup .exe with INNO setup   
 call "%JAVA_HOME%\bin\jpackage" ^
-  --type msi ^
+  --type exe ^
   --dest target/installer ^
   --input target/installer/input/libs ^
   --name %NAME%_setup ^
