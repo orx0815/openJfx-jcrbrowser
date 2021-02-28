@@ -8,7 +8,7 @@ source ./jpackage_scripts/jLink_jDeps.sh
 # A loop iterates over the various packaging types supported by jpackage. In
 # the end we will find all packages inside the target/installer directory.
 
-for type in "app-image" "dmg" "pkg"
+for type in "dmg" "pkg"
 do
   echo "Creating mac installer of type ... $type"
 

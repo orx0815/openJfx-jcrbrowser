@@ -18,8 +18,6 @@ echo mainclass filePath part: %MAIN_CLASS_FILEPATH%
 echo vendor: %VENDOR%
 echo copyright: %COPYRIGHT%
 
-rem Set desired installer type: "app-image" "msi" "exe".
-set INSTALLER_TYPE=exe
 
 rem ------ SETUP DIRECTORIES AND FILES ----------------------------------------
 rem Remove previously generated java runtime and installers. Copy all required
@@ -78,11 +76,12 @@ call "%JAVA_HOME%\bin\jlink" ^
 rem ------ PACKAGING ----------------------------------------------------------
 rem In the end we will find the package inside the target/installer directory.
 
+rem this creates MSI installer with WIX toolset
 call "%JAVA_HOME%\bin\jpackage" ^
-  --type %INSTALLER_TYPE% ^
+  --type msi ^
   --dest target/installer ^
   --input target/installer/input/libs ^
-  --name %NAME% ^
+  --name %NAME%_setup ^
   --main-class %MAIN_CLASS% ^
   --main-jar %MAIN_JAR% ^
   --java-options -Xmx2048m ^
@@ -95,3 +94,22 @@ call "%JAVA_HOME%\bin\jpackage" ^
   --win-shortcut ^
   --win-per-user-install ^
   --win-menu
+
+rem this creates a setup .exe with INNO setup   
+call "%JAVA_HOME%\bin\jpackage" ^
+  --type msi ^
+  --dest target/installer ^
+  --input target/installer/input/libs ^
+  --name %NAME%_setup ^
+  --main-class %MAIN_CLASS% ^
+  --main-jar %MAIN_JAR% ^
+  --java-options -Xmx2048m ^
+  --runtime-image target/java-runtime ^
+  --icon src/main/logo/logo_200x200.ico ^
+  --app-version %APP_VERSION% ^
+  --vendor "%VENDOR%" ^
+  --copyright "%COPYRIGHT%" ^
+  --win-dir-chooser ^
+  --win-shortcut ^
+  --win-per-user-install ^
+  --win-menu  

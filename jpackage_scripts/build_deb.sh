@@ -8,7 +8,7 @@ source ./jpackage_scripts/jLink_jDeps.sh
 # A loop iterates over the various packaging types supported by jpackage. In
 # the end we will find all packages inside the target/installer directory.
 
-for type in "app-image" "deb"
+for type in "deb" "rpm"
 do
   echo "Creating Linux deb installer of type ... $type"
 

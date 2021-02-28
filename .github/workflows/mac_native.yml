@@ -1,0 +1,33 @@
+name: MacOS BIN
+
+on:
+  workflow_dispatch
+
+jobs:
+  build:
+    runs-on: macOS-latest
+    steps:
+    - uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: '11.7.0'
+    - uses: actions/checkout@v2
+    - name: Setup GraalVM environment
+      uses: DeLaGuardo/setup-graalvm@master
+      with:
+        graalvm-version: '21.0.0.java11'
+        
+    - name: Make staging directory
+      run: mkdir staging
+    
+    - name: gluon client plugin build
+      run: mvn -P spring-graal client:build
+      env:
+        GRAALVM_HOME: ${{ env.JAVA_HOME }}
+        
+    - name: Copy native client to staging
+      run: cp -r target/client/x86_64-darwin/OpenJfxJcrBrowser* staging
+    - name: Upload
+      uses: actions/upload-artifact@v2
+      with:
+        name: mac_binary
+        path: staging

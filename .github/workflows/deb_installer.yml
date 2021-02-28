@@ -20,7 +20,7 @@ jobs:
       
     - name: Make staging directory
       run: mkdir staging
-    - name: Copy native msi to staging
+    - name: Copy native .deb to staging
       run: cp -r target/installer/*.deb staging
     - name: Upload
       uses: actions/upload-artifact@v2

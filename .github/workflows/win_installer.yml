@@ -18,14 +18,24 @@ jobs:
     - name: Build with jpackage scripts
       run: mvn -P build-win package
     
-    - name: Make staging directory
-      run: mkdir staging
+    # upload msi
+    - name: Make msi-staging director
+      run: mkdir msi-staging
     - name: Copy native msi to staging
-      run: cp -r target/installer/*.msi staging
-    - name: Copy native exe to staging
-      run: cp -r target/installer/*.exe staging  
-    - name: Upload
+      run: cp -r target/installer/*.msi msi-staging     
+    - name: Upload msi
       uses: actions/upload-artifact@v2
       with:
-        name: windows installer
-        path: staging    
+        name: windows msi installer
+        path: msi-staging    
+        
+    # upload setup.exe    
+    - name: Make exe-staging director
+      run: mkdir exe-staging  
+    - name: Copy native exe to staging
+      run: cp -r target/installer/*.exe exe-staging    
+    - name: Upload setup exe
+      uses: actions/upload-artifact@v2
+      with:
+        name: windows setup.exe style installer
+        path: exe-staging    
