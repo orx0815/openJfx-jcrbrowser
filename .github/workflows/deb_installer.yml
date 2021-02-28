@@ -19,7 +19,7 @@ jobs:
       run: mvn -P build-deb package
       
     - name: Make staging directory
-        run: mkdir staging
+      run: mkdir staging
     - name: Copy native msi to staging
       run: cp -r target/installer/*.deb staging
     - name: Upload

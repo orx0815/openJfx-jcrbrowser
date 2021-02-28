@@ -19,7 +19,7 @@ jobs:
       run: mvn -P build-win package
     
     - name: Make staging directory
-        run: mkdir staging
+      run: mkdir staging
     - name: Copy native msi to staging
       run: cp -r target/installer/*.msi staging
     - name: Copy native exe to staging
