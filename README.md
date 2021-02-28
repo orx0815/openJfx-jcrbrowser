@@ -105,9 +105,8 @@ For setup.exe style installers you'll need INNO setup. When running GitHub Actio
 It's activated with separate maven build-* profiles:
 
     mvn -P build-win package
-    mvn -P build-mac package  (untested)
-    mvn -P build-deb package
-    mvn -P build-rpm package (also untested, somehow does not work from debian based distro)
+    mvn -P build-mac package
+    mvn -P build-linux package
     
 In ./target/installer you'll find the .msi/.deb/.rpm/.dkp/.pkg for your platform.
 

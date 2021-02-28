@@ -1,5 +1,5 @@
 # This workflow will build a .deb installer
-name: Windows .msi installer with jpackage
+name: Windows MSI/EXE installers, executable jars (platform dependent)
 
 on:
   workflow_dispatch
@@ -38,4 +38,15 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: windows setup.exe style installer
-        path: exe-staging    
+        path: exe-staging
+        
+    # executable jars (platform dependent)    
+    - name: Platform dependent fat/uber jars
+      run: mkdir jar-staging
+    - name: Copy JARs to staging
+      run: cp target/*.jar staging
+    - name: Upload
+      uses: actions/upload-artifact@v2
+      with:
+        name: excecuteable jars mac
+        path: jar-staging

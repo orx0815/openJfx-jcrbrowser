@@ -330,12 +330,10 @@
         </pluginManagement>
       </build>
     </profile>
-          
-    
         
     <!-- inspired by https://github.com/dlemmermann/JPackageScriptFX -->    
     <profile>
-      <id>build-deb</id>
+      <id>build-linux</id>
       <properties>
         <!-- jdl14 is minimum, due to jpackage -->
         <java.version>14</java.version>
@@ -348,7 +346,7 @@
             <groupId>org.codehaus.mojo</groupId>
             <executions>
               <execution>
-                <id>Build Native .deb installer</id>
+                <id>Build Native .deb .rpm installer</id>
                 <phase>package</phase>
                 <goals>
                   <goal>exec</goal>
@@ -356,36 +354,7 @@
               </execution>
             </executions>
             <configuration>
-              <executable>./jpackage_scripts/build_deb.sh</executable>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    
-    <profile>
-      <id>build-rpm</id>
-      <properties>
-        <!-- jdl14 is minimum, due to jpackage -->
-        <java.version>14</java.version>
-      </properties>
-      <build>
-        <plugins>
-          <!-- run the build_deb.sh for jlink/jpackage -->
-          <plugin>
-            <artifactId>exec-maven-plugin</artifactId>
-            <groupId>org.codehaus.mojo</groupId>
-            <executions>
-              <execution>
-                <id>Build Native .rmp installer</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>exec</goal>
-                </goals>
-              </execution>
-            </executions>
-            <configuration>
-              <executable>./jpackage_scripts/build_rpm.sh</executable>
+              <executable>./jpackage_scripts/build_linux.sh</executable>
             </configuration>
           </plugin>
         </plugins>
@@ -625,6 +594,18 @@
           
         </plugins>
       </build>
+      <pluginRepositories>
+        <pluginRepository>
+          <id>Spring Milestones Repository</id>
+          <url>	https://repo.spring.io/milestone</url>
+        </pluginRepository>
+      </pluginRepositories>
+      <repositories>
+        <repository>
+          <id>Spring Milestones Repository</id>
+          <url>https://repo.spring.io/milestone</url>
+        </repository>
+      </repositories>
     </profile>
     
   </profiles>

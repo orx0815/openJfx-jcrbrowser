@@ -1,0 +1,49 @@
+# This workflow will build a .deb installer
+name: Linux DEB/RPM installers, executable jars (platform dependent)
+
+on:
+  workflow_dispatch
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 15
+      uses: actions/setup-java@v1
+      with:
+        java-version: 15
+    - name: Build with Maven
+      run: mvn -P build-linux package
+      
+    - name: Make deb-staging directory
+      run: mkdir deb-staging
+    - name: Copy native .deb to staging
+      run: cp -r target/installer/*.deb deb-staging
+    - name: Upload
+      uses: actions/upload-artifact@v2
+      with:
+        name: linux .deb installer
+        path: staging
+        
+    - name: Make rpm-staging directory
+      run: mkdir rpm-staging
+    - name: Copy native .rpm to staging
+      run: cp -r target/installer/*.rpm rpm-staging
+    - name: Upload
+      uses: actions/upload-artifact@v2
+      with:
+        name: linux .rpm installer
+        path: staging    
+        
+    - name: Platform dependent fat/uber jars
+      run: mkdir jar-staging
+    - name: Copy JARs to staging
+      run: cp target/*.jar staging
+    - name: Upload
+      uses: actions/upload-artifact@v2
+      with:
+        name: excecuteable jars linux
+        path: jar-staging

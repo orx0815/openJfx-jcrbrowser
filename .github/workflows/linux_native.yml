@@ -17,11 +17,6 @@ jobs:
     - name: Install libraries
       run: sudo apt install libasound2-dev libavcodec-dev libavformat-dev libavutil-dev libgl-dev libgtk-3-dev libpango1.0-dev libxtst-dev
     
-#    - name: Build JAR with Maven
-#      run: mvn -B package
-#    - name: Copy JAR to staging
-#      run: cp target/*.jar staging
-    
     - name: gluon client plugin build
       run: mvn -P spring-graal client:build
       env:
