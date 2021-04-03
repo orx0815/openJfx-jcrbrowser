@@ -28,9 +28,9 @@
   <properties>
     <java.version>11</java.version>
     <mainClassName>org.motorbrot.javafxjcrbrowser.Main</mainClassName>
-    <openjfx.version>15.0.1</openjfx.version>
+    <openjfx.version>16</openjfx.version>
     <jackrabbit.version>2.21.5</jackrabbit.version>
-    <springboot.version>2.4.1</springboot.version>
+    <springboot.version>2.4.3</springboot.version>
   </properties>
   
   <build>
@@ -486,6 +486,10 @@
           <groupId>org.springframework.experimental</groupId>
           <artifactId>spring-graalvm-native</artifactId>
           <version>0.8.5</version>
+          <!-- beta isn't working anymore
+          <artifactId>spring-native</artifactId>
+          <version>0.9.0</version>
+          -->
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -529,7 +533,7 @@
           <plugin>
             <groupId>com.gluonhq</groupId>
             <artifactId>client-maven-plugin</artifactId>
-            <version>0.1.36</version>
+            <version>0.1.38</version>
             <configuration>
               <!-- Uncomment to run on iOS: -->
               <!-- <target>ios</target>-->
@@ -591,7 +595,27 @@
               <mainClass>${mainClassName}</mainClass>
             </configuration>
           </plugin>
-          
+          <!-- 
+          <plugin>
+            <groupId>org.springframework.experimental</groupId>
+            <artifactId>spring-aot-maven-plugin</artifactId>
+            <version>${spring.native.version}</version>
+            <executions>
+              <execution>
+                <id>test-generate</id>
+                <goals>
+                  <goal>test-generate</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>generate</id>
+                <goals>
+                  <goal>generate</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+               -->   
         </plugins>
       </build>
       <pluginRepositories>
@@ -599,11 +623,19 @@
           <id>Spring Milestones Repository</id>
           <url>	https://repo.spring.io/milestone</url>
         </pluginRepository>
+        <pluginRepository>
+          <id>Spring Release Repository</id>
+          <url>https://maven.springframework.org/release</url>
+        </pluginRepository>
       </pluginRepositories>
       <repositories>
         <repository>
           <id>Spring Milestones Repository</id>
           <url>https://repo.spring.io/milestone</url>
+        </repository>
+        <repository>
+          <id>Spring Release Repository</id>
+          <url>https://maven.springframework.org/release</url>
         </repository>
       </repositories>
     </profile>
