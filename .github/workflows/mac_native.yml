@@ -20,7 +20,7 @@ jobs:
       run: mkdir staging
     
     - name: gluon client plugin build
-      run: mvn -P spring-graal client:build
+      run: mvn -P spring-graal package client:build
       env:
         GRAALVM_HOME: ${{ env.JAVA_HOME }}
         
