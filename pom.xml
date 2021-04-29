@@ -29,7 +29,7 @@
     <java.version>11</java.version>
     <mainClassName>org.motorbrot.javafxjcrbrowser.Main</mainClassName>
     <openjfx.version>16</openjfx.version>
-    <jackrabbit.version>2.21.5</jackrabbit.version>
+    <jackrabbit.version>2.21.6</jackrabbit.version>
     <springboot.version>2.4.5</springboot.version>
   </properties>
   
@@ -569,7 +569,8 @@
                 <nativeImageArg>--enable-http</nativeImageArg>
                 <nativeImageArg>--enable-https</nativeImageArg>
                 
-                 <nativeImageArg>--initialize-at-build-time=org.apache.commons.logging.impl.SLF4JLocationAwareLog</nativeImageArg>
+                <!-- https://github.com/oracle/graal/issues/2719 -->
+                <nativeImageArg>--initialize-at-build-time=com.sun.org.apache.xml.internal.serializer.ToXMLStream,org.apache.commons.logging.impl.SLF4JLocationAwareLog</nativeImageArg>
               </nativeImageArgs>
               
               <mainClass>${mainClassName}</mainClass>
