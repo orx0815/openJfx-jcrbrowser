@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>openjfx-jcr-browser.deploy.shade.desktop</artifactId>
+  <packaging>jar</packaging>
+
+  <name>OpenJfxJcrBrowser-Desktop Shade</name>
+  
+  <parent>
+    <groupId>org.motorbrot</groupId>
+    <artifactId>openjfx-jcr-browser.parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <relativePath>../../pom.xml</relativePath>
+  </parent>
+    
+  <dependencies>
+    <dependency>
+			<groupId>org.motorbrot</groupId>
+			<artifactId>openjfx-jcr-browser.desktop</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
+		</dependency>
+  </dependencies>
+  
+  <build>
+    <plugins>
+      
+      <!-- Excecutable jar with Maven Shade Plugin to generate an uber.jar with all dependencies included.
+            'java -jar target/openjfx-jcr-browser-1.0-SNAPSHOT-uber.jar'
+      -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.2.4</version>
+        <executions>
+          <!-- Run shade goal on package phase -->
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+                    
+              <shadedArtifactAttached>true</shadedArtifactAttached>
+              <shadedClassifierName>uber</shadedClassifierName>
+                    
+              <transformers>
+                <!-- add Main-Class to manifest file -->
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>${mainClassName}</mainClass>
+                </transformer>
+
+                <!--  each ImageIO plugin JAR contains multiple resources under META-INF/services.
+                These resources are needed for automatic discovery of the ImageIO plugins.
+                When you unpack all the JAR files into a single folder, these will be overwritten for each JAR.
+                Instead, the resources with the same name needs to be merge into a new, single resource by ServicesResourceTransformer. -->
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                      
+                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                  <resource>META-INF/spring.handlers</resource>
+                </transformer>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                  <resource>META-INF/spring.schemas</resource>
+                </transformer>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                  <resource>META-INF/spring.factories</resource>
+                </transformer>
+
+              </transformers>
+              <createDependencyReducedPom>false</createDependencyReducedPom>
+
+              <!-- do not copy any (tika/bouncycastle) jar-signature files into uber.jar, as they cause
+              SecurityException: Invalid signature file digest for Manifest main attributes -->
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      
+    </plugins>
+  </build>
+
+</project>

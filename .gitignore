@@ -26,3 +26,10 @@ maven-eclipse.xml
 /nb-configuration.xml
 /nbactions.xml
 /temp.txt
+/modules/desktop/target/
+/deploy/maven-shade/target/
+/deploy/spring-boot-maven/target/
+/deploy/jpackagefx/target/
+/deploy/webstart/target/
+/deploy/jpro/target/
+/deploy/graalvm/target/

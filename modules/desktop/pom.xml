@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>openjfx-jcr-browser.desktop</artifactId>
+  <packaging>jar</packaging>
+
+  <name>OpenJfxJcrBrowser-Desktop</name>
+  
+  <parent>
+    <groupId>org.motorbrot</groupId>
+    <artifactId>openjfx-jcr-browser.parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <relativePath>../../pom.xml</relativePath>
+  </parent>
+    
+  <build>
+    <plugins>
+
+      <!-- Test the app with 'mvn test' --> 
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <!-- 
+             Comment out the following systemPropertyVariables, if you want to see unitTest on the desktop in action.
+             Stealing the mouse or locking the screen during execution will fail the test. 
+          -->
+          <systemPropertyVariables>
+            <java.awt.headless>true</java.awt.headless>
+            <testfx.robot>glass</testfx.robot>
+            <testfx.headless>true</testfx.headless>
+            <prism.order>sw</prism.order>
+            <prism.text>t2k</prism.text>
+          </systemPropertyVariables>
+        
+        </configuration>
+      </plugin>
+      
+      <!-- openjfx plugin: 'mvn javafx:run'
+           
+           Creating an application image with custom modular jvm via
+            'mvn javafx:jlink' 
+           will NOT work yet, as the project itself isn't modular due to non-modularized 3rd party dependencies
+      -->
+      <plugin>
+            <groupId>org.openjfx</groupId>
+          <artifactId>javafx-maven-plugin</artifactId>
+          <version>0.0.5</version>
+          <configuration>
+              <mainClass>${mainClassName}</mainClass>
+          </configuration>
+      </plugin>
+      
+    </plugins>
+  </build>
+      
+  
+  <!-- ====================================================================== -->
+  <!-- D E P E N D E N C I E S -->
+  <!-- ====================================================================== -->  
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <!-- Import dependency management from Spring Boot -->
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${springboot.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+      
+    <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
+    
+    <!-- JCR and jackrabbit-jcr2dav -->    
+    <dependency>
+      <groupId>javax.jcr</groupId>
+      <artifactId>jcr</artifactId>
+      <version>2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.jackrabbit</groupId>
+      <artifactId>jackrabbit-jcr2dav</artifactId>
+      <version>${jackrabbit.version}</version>
+    </dependency>
+    <!-- following are dependencies of jcr2dav but need explicit version here. 
+         Otherwise sling.testing.jcr-mock will downgrade dependency -->
+    <dependency>
+      <groupId>org.apache.jackrabbit</groupId>
+      <artifactId>jackrabbit-jcr-commons</artifactId>
+      <version>${jackrabbit.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    
+    <!-- open-jfx -->
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-controls</artifactId>
+      <version>${openjfx.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-fxml</artifactId>
+      <version>${openjfx.version}</version>
+    </dependency>
+
+    <!-- for the application itself -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-csv</artifactId>
+      <version>1.8</version>
+    </dependency>
+    
+    <!-- Tests -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+        
+    <dependency>
+      <groupId>org.apache.sling</groupId>
+      <artifactId>org.apache.sling.testing.jcr-mock</artifactId>
+      <version>1.5.0</version>
+      <scope>test</scope>
+    </dependency>
+        
+    <dependency>
+      <groupId>org.testfx</groupId>
+      <artifactId>testfx-core</artifactId>
+      <version>4.0.16-alpha</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testfx</groupId>
+      <artifactId>testfx-junit5</artifactId>
+      <version>4.0.16-alpha</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- If you wish to test in a headless environment your must add Monocle as a test dependency -->
+    <dependency>
+      <groupId>org.testfx</groupId>
+      <artifactId>openjfx-monocle</artifactId>
+      <!--version>jdk-11+26</version-->
+      <version>jdk-12.0.1+2</version>
+      <scope>test</scope>
+    </dependency>
+        
+  </dependencies>
+
+</project>

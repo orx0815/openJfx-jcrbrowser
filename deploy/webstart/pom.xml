@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>openjfx-jcr-browser.deploy.webstart.desktop</artifactId>
+  <packaging>jar</packaging>
+
+  <name>OpenJfxJcrBrowser-Desktop JNLP builder</name>
+  
+  <parent>
+    <groupId>org.motorbrot</groupId>
+    <artifactId>openjfx-jcr-browser.parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <relativePath>../../pom.xml</relativePath>
+  </parent>
+  
+  <dependencies>
+    <dependency>
+      <groupId>org.motorbrot</groupId>
+      <artifactId>openjfx-jcr-browser.desktop</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+    
+  <build>
+    <plugins>
+      
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>webstart-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>jnlp</id>
+            <phase>package</phase>
+            <goals>
+              <!-- using jnlp-single to avoid a forked build see: http://www.mojohaus.org/webstart/webstart-maven-plugin/faq.html -->
+              <goal>jnlp-inline</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <updateManifestEntries>
+            <Permissions>all-permissions</Permissions>
+            <Codebase>*</Codebase>
+          </updateManifestEntries>
+          <excludeTransitive>false</excludeTransitive>
+
+          <!-- JNLP generation -->
+          <jnlp>
+            <!--inputTemplate>template-openjfx.vm</inputTemplate-->
+            <outputFile>OpenJfxJcrBrowser.jnlp</outputFile>
+    
+            <mainClass>${mainClassName}</mainClass>
+          </jnlp>
+              
+          <!-- SIGNING -->
+          <!-- automatically sign the jar and its dependencies, -->
+          <sign>
+            <alias>openwebstart</alias>
+            <arguments>
+              <!-- default SHA1 not acceptable anymore -->
+              <argument>-sigalg</argument>
+              <argument>SHA256withRSA</argument>
+              <!-- Timestamping  -->
+              <argument>-tsa</argument>
+              <argument>http://timestamp.digicert.com</argument>
+            </arguments>
+            <keystore>openwebstart.jks</keystore>
+            <keypass>changeit</keypass>
+            <storepass>changeit</storepass>
+
+            <verify>true</verify> 
+
+          </sign>
+
+        </configuration>
+      </plugin>
+      
+    </plugins>
+    
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>webstart-maven-plugin</artifactId>
+          <version>1.0-beta-7</version>
+          <dependencies>
+            <!-- https://mvnrepository.com/artifact/org.codehaus.mojo/keytool-api -->
+            <dependency>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>keytool-api-1.7</artifactId>
+              <version>1.5</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+  
+</project>

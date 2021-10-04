@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>openjfx-jcr-browser.deploy.jpackagefx.desktop</artifactId>
+  <packaging>jar</packaging>
+
+  <name>OpenJfxJcrBrowser-Desktop-jlink-installers</name>
+  
+  <parent>
+    <groupId>org.motorbrot</groupId>
+    <artifactId>openjfx-jcr-browser.parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <relativePath>../../pom.xml</relativePath>
+  </parent>
+  
+  <dependencies>
+    <dependency>
+			<groupId>org.motorbrot</groupId>
+			<artifactId>openjfx-jcr-browser.desktop</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
+		</dependency>
+  </dependencies>
+  
+  <properties>
+    <!-- jdl14 is minimum, due to jpackage -->
+    <java.version>14</java.version>
+    <mainClassName>org.motorbrot.jlink.Main</mainClassName>
+  </properties>
+    
+  <build>
+    <plugins>
+      
+      <!-- copy dependencies to libs for jdeps/jlink/jpackage "Runtime Image Generation" done  -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.1.1</version>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/libs</outputDirectory>
+              <includeScope>compile</includeScope>
+              <includeScope>runtime</includeScope>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      
+
+      <!-- Run the app with 'mvn exec:java' -->          
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.6.0</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>java</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>Build Native Runtime Image Package with jpackage</id>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <mainClass>${mainClassName}</mainClass>
+          
+          <!-- variables passed to scripts in "Runtime Image Generation" build-* profiles -->
+          <environmentVariables>
+            <NAME>${project.name}</NAME>
+            <MAIN_CLASS>${mainClassName}</MAIN_CLASS>
+            <ARTEFACT_ID>${project.artifactId}</ARTEFACT_ID>
+            <APP_VERSION>
+              <!-- windows installer does not like -SNAPSHOP in version -->
+              ${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}
+            </APP_VERSION>
+            <PROJECT_VERSION>
+              ${project.version}
+            </PROJECT_VERSION>
+            <JAVA_VERSION>${java.version}</JAVA_VERSION>
+            <VENDOR>${project.organization.name}</VENDOR>
+            <COPYRIGHT>Copyright © 2021-22 ${project.organization.name}.</COPYRIGHT>
+          </environmentVariables>
+        </configuration>
+      </plugin>
+      
+    </plugins>
+  </build>
+  
+  <!-- inspired by https://github.com/dlemmermann/JPackageScriptFX -->    
+  <profiles>
+    <profile>
+      <id>build-linux</id>
+      <activation>
+        <os><family>linux</family></os>
+      </activation>
+      <build>
+        <plugins>
+          <!-- run the build_deb.sh for jlink/jpackage -->
+          <plugin>
+            <artifactId>exec-maven-plugin</artifactId>
+            <groupId>org.codehaus.mojo</groupId>
+            <executions>
+              <execution>
+                <id>Build Native .deb .rpm installer</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <executable>./jpackage_scripts/build_linux.sh</executable>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    
+    <profile>
+      <id>build-mac</id>
+      <activation>
+        <os><family>mac</family></os>
+      </activation>
+
+      <build>
+        <plugins>
+          <!-- run the build_deb.sh for jlink/jpackage -->
+          <plugin>
+            <artifactId>exec-maven-plugin</artifactId>
+            <groupId>org.codehaus.mojo</groupId>
+            <executions>
+              <execution>
+                <id>Build Native .dmg .pkg installer</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <executable>./jpackage_scripts/build_mac.sh</executable>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>build-win</id>
+      <activation>
+        <os><family>windows</family></os>
+      </activation>
+
+      <build>
+        <plugins>
+          
+          <!-- run the build_app.bat for jlink/jpackage -->
+          <plugin>
+            <artifactId>exec-maven-plugin</artifactId>
+            <groupId>org.codehaus.mojo</groupId>
+            <executions>
+              <execution>
+                <id>Build Native .msi installer</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <executable>./jpackage_scripts/build_app.bat</executable>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>   
+  </profiles>
+  
+</project>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>openjfx-jcr-browser.deploy.graalvm.desktop</artifactId>
+  <packaging>jar</packaging>
+
+  <name>OpenJfxJcrBrowser-Desktop GraalVm AOT Compilation</name>
+  
+  <parent>
+    <groupId>org.motorbrot</groupId>
+    <artifactId>openjfx-jcr-browser.parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <relativePath>../../pom.xml</relativePath>
+  </parent>
+  
+  <properties>
+    <java.version>11</java.version>
+    <spring.native.version>0.9.2</spring.native.version>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
+  </properties>
+  
+  <dependencies>
+    <dependency>
+      <groupId>org.motorbrot</groupId>
+      <artifactId>openjfx-jcr-browser.desktop</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
+    </dependency>
+        
+    <dependency>
+      <groupId>org.springframework.experimental</groupId>
+      <artifactId>spring-native</artifactId>
+      <version>${spring.native.version}</version>
+    </dependency>
+        
+  </dependencies>
+    
+  <build>
+        <plugins>
+          
+          <plugin>
+            <groupId>org.springframework.experimental</groupId>
+            <artifactId>spring-aot-maven-plugin</artifactId>
+            <version>${spring.native.version}</version>
+            <executions>
+              <execution>
+                <id>test-generate</id>
+                <goals>
+                  <goal>test-generate</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>generate</id>
+                <goals>
+                  <goal>generate</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          
+          <!--  'mvn -Pspring-graal client:build' -->
+          <plugin>
+            <groupId>com.gluonhq</groupId>
+            <artifactId>client-maven-plugin</artifactId>
+            <version>0.1.38</version>
+            <configuration>
+              <!-- Uncomment to run on iOS: -->
+              <!-- <target>ios</target>-->
+          
+              <reflectionList>
+                <list>javafx.fxml.FXMLLoader</list>
+                <list>org.motorbrot.javafxjcrbrowser.JavaFxJcrBrowserApplication</list>
+                <list>org.motorbrot.javafxjcrbrowser.JcrBrowserSceneController</list>
+                <list>org.motorbrot.javafxjcrbrowser.jcrpanel.JcrPanelController</list>
+                <list>org.motorbrot.javafxjcrbrowser.xmlexport.XmlExportTabController</list>
+                <list>org.motorbrot.javafxjcrbrowser.csv.CsvTabController</list>
+                <list>org.motorbrot.javafxjcrbrowser.bling.BlingTabController</list>
+
+                <list>javafx.geometry.Insets</list>
+                <list>javafx.scene.control.TreeView</list>
+                <list>javafx.scene.control.Button</list>
+                <list>javafx.scene.control.Label</list>
+                <list>javafx.scene.control.TabPane</list>
+                <list>javafx.scene.control.TextArea</list>
+                <list>javafx.scene.control.TextField</list>
+                <list>javafx.scene.control.TreeItem</list>
+                <list>javafx.scene.image.ImageView</list>
+                <list>javafx.scene.control.Accordion</list>
+                <list>javafx.scene.control.TitledPane</list>
+                <list>javafx.scene.control.ScrollBar</list>
+                <list>javafx.scene.control.TableColumn</list>
+                <list>javafx.scene.control.TableColumnBase</list>
+                <list>javafx.scene.control.TableView</list>
+                <list>javafx.scene.control.TreeCell</list>
+                <list>javafx.scene.control.Menu</list>
+                <list>javafx.scene.control.MenuBar</list>
+                <list>javafx.scene.control.MenuItem</list>
+                <list>javafx.scene.control.PasswordField</list>
+                <list>javafx.scene.control.SplitPane</list>
+                <list>javafx.scene.control.Tab</list>
+                <list>javafx.scene.layout.AnchorPane</list>
+                <list>javafx.scene.layout.HBox</list>
+                <list>javafx.scene.layout.Region</list>
+                <list>javafx.scene.layout.VBox</list>
+                <list>javafx.scene.control.Accordion</list>
+                <list>javafx.scene.control.ColorPicker</list>
+                <list>javafx.scene.layout.Pane</list>
+                <list>javafx.scene.layout.VBox</list>
+                  
+              </reflectionList>
+              <nativeImageArgs>
+                <nativeImageArg>--enable-http</nativeImageArg>
+                <nativeImageArg>--enable-https</nativeImageArg>
+                
+                <!-- https://github.com/oracle/graal/issues/2719 -->
+                <nativeImageArg>--initialize-at-build-time=com.sun.org.apache.xml.internal.serializer.ToXMLStream,org.apache.commons.logging.impl.SLF4JLocationAwareLog</nativeImageArg>
+              </nativeImageArgs>
+              
+              <mainClass>${mainClassName}</mainClass>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+      <repositories>
+        <repository>
+          <id>Spring Milestones Repository</id>
+          <url>https://repo.spring.io/milestone</url>
+        </repository>
+        <repository>
+          <id>Spring Release Repository</id>
+          <url>https://maven.springframework.org/release</url>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <id>Spring Milestones Repository</id>
+          <url>	https://repo.spring.io/milestone</url>
+        </pluginRepository>
+        <pluginRepository>
+          <id>Spring Release Repository</id>
+          <url>https://maven.springframework.org/release</url>
+        </pluginRepository>
+      </pluginRepositories>
+  
+</project>
