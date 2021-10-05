@@ -17,6 +17,7 @@
   <build>
     <plugins>
 
+      <!-- toDo: exec:java --> 
       <!-- Test the app with 'mvn test' --> 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -52,6 +53,21 @@
           </configuration>
       </plugin>
       
+      <!-- generate META-INF spring.components -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <annotationProcessorPaths>
+            <path>
+              <groupId>org.springframework</groupId>
+              <artifactId>spring-context-indexer</artifactId>
+              <version>5.3.2</version>
+            </path>
+          </annotationProcessorPaths>
+        </configuration>
+      </plugin>
+      
     </plugins>
   </build>
       
@@ -59,19 +75,6 @@
   <!-- ====================================================================== -->
   <!-- D E P E N D E N C I E S -->
   <!-- ====================================================================== -->  
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <!-- Import dependency management from Spring Boot -->
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-dependencies</artifactId>
-        <version>${springboot.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
   <dependencies>
       
     <dependency>

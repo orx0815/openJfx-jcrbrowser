@@ -28,9 +28,9 @@
   <properties>
     <java.version>11</java.version>
     <mainClassName>org.motorbrot.javafxjcrbrowser.Main</mainClassName>
-    <openjfx.version>16</openjfx.version>
-    <jackrabbit.version>2.21.6</jackrabbit.version>
-    <springboot.version>2.4.5</springboot.version>
+    <openjfx.version>15.0.1</openjfx.version>
+    <jackrabbit.version>2.21.5</jackrabbit.version>
+    <springboot.version>2.4.1</springboot.version>
   </properties>
     
   <modules>
@@ -43,6 +43,19 @@
     <!--module>deploy/webstart</module-->
     <!--module>deploy/jpro</module-->
   </modules>
+  
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <!-- Import dependency management from Spring Boot -->
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${springboot.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   
   <build>
     <plugins>

@@ -28,18 +28,45 @@
       <version>1.0.0-SNAPSHOT</version>
     </dependency>
         
-    <dependency>
+    <!--dependency>
       <groupId>org.springframework.experimental</groupId>
       <artifactId>spring-native</artifactId>
       <version>${spring.native.version}</version>
+    </dependency-->
+    <dependency>
+      <groupId>org.springframework.experimental</groupId>
+      <artifactId>spring-graalvm-native</artifactId>
+      <version>0.8.5</version>
     </dependency>
-        
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
+      <exclusions>
+        <!-- On purpose exclusion to test java.util.logging -->
+        <exclusion>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-logging</artifactId>
+        </exclusion>
+                
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context-indexer</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-configuration-processor</artifactId>
+      <optional>true</optional>
+    </dependency>
+    
+     
   </dependencies>
     
   <build>
         <plugins>
-          
-          <plugin>
+
+          <!--plugin>
             <groupId>org.springframework.experimental</groupId>
             <artifactId>spring-aot-maven-plugin</artifactId>
             <version>${spring.native.version}</version>
@@ -57,13 +84,13 @@
                 </goals>
               </execution>
             </executions>
-          </plugin>
+          </plugin-->
           
           <!--  'mvn -Pspring-graal client:build' -->
           <plugin>
             <groupId>com.gluonhq</groupId>
             <artifactId>client-maven-plugin</artifactId>
-            <version>0.1.38</version>
+            <version>0.1.36</version>
             <configuration>
               <!-- Uncomment to run on iOS: -->
               <!-- <target>ios</target>-->

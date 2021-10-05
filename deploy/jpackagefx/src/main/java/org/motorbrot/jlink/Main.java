@@ -3,7 +3,7 @@ package org.motorbrot.jlink;
 import org.motorbrot.javafxjcrbrowser.JavaFxJcrBrowserApplication;
 
 /**
- * Entry Point, recommended not to use the javafx spplication
+ * Entry Point, recommended not to use the javafx application
  */
 public class Main {
   
