@@ -30,7 +30,7 @@
     <mainClassName>org.motorbrot.javafxjcrbrowser.Main</mainClassName>
     <openjfx.version>15.0.1</openjfx.version>
     <jackrabbit.version>2.21.5</jackrabbit.version>
-    <springboot.version>2.4.1</springboot.version>
+    <springboot.version>2.5.4</springboot.version>
   </properties>
     
   <modules>
@@ -38,7 +38,7 @@
     <module>modules/desktop</module>
     <module>deploy/maven-shade</module>
     <module>deploy/spring-boot-maven</module>
-    <module>deploy/jpackagefx</module>
+    <!--module>deploy/jpackagefx</module-->
     <!--module>deploy/graalvm</module-->
     <!--module>deploy/webstart</module-->
     <!--module>deploy/jpro</module-->
