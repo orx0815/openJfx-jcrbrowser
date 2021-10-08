@@ -5,7 +5,7 @@
   <artifactId>openjfx-jcr-browser.deploy.graalvm.desktop</artifactId>
   <packaging>jar</packaging>
 
-  <name>OpenJfxJcrBrowser-Desktop GraalVm AOT Compilation</name>
+  <name>OpenJfxJcrBrowser-Desktop-Graalvm-bin</name>
   
   <parent>
     <groupId>org.motorbrot</groupId>
@@ -57,6 +57,9 @@
                 </goals>
               </execution>
             </executions>
+            <configuration>
+              <mainClass>${mainClassName}</mainClass>
+            </configuration>
           </plugin>
           
           <!--  'mvn -Pspring-graal client:build' -->
@@ -109,6 +112,7 @@
                 <list>javafx.scene.layout.VBox</list>
                 
                 <list>org.apache.http.impl.auth.BasicScheme</list>
+                <list>org.apache.http.impl.auth.RFC2617Scheme</list>
                   
               </reflectionList>
               <nativeImageArgs>
@@ -135,27 +139,11 @@
       </build>
       <repositories>
         <repository>
-          <id>Spring Milestones Repository</id>
-          <url>https://repo.spring.io/milestone</url>
-        </repository>
-        <repository>
-          <id>Spring Release Repository</id>
-          <url>https://maven.springframework.org/release</url>
-        </repository>
-        <repository>
           <id>SpringIo Release Repository</id>
           <url>https://repo.spring.io/release</url>
         </repository>
       </repositories>
       <pluginRepositories>
-        <pluginRepository>
-          <id>Spring Milestones Repository</id>
-          <url>	https://repo.spring.io/milestone</url>
-        </pluginRepository>
-        <pluginRepository>
-          <id>Spring Release Repository</id>
-          <url>https://repo.spring.io/release"</url>
-        </pluginRepository>
         <pluginRepository>
           <id>SpringIo Release Repository</id>
           <url>https://repo.spring.io/release</url>

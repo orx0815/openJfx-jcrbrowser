@@ -17,7 +17,32 @@
   <build>
     <plugins>
 
-      <!-- toDo: exec:java --> 
+      <!-- Run the app with 'mvn exec:java' -->          
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.6.0</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>java</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <mainClass>${mainClassName}</mainClass>
+        </configuration>
+      </plugin>
+      
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>${springboot.version}</version>
+        <configuration>
+          <mainClass>${mainClassName}</mainClass>
+        </configuration>
+      </plugin>
+       
       <!-- Test the app with 'mvn test' --> 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

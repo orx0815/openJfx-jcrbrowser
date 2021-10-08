@@ -1,26 +1,93 @@
 # OpenJfx Jcr Browser
 
-### Proof-of-concept maven build for java desktop-applications
 
-[![Windows MSI/EXE installers, executable jars (platform dependent)](https://github.com/orx0815/openJfx-jcrbrowser/actions/workflows/win_installer.yml/badge.svg)](https://github.com/orx0815/openJfx-jcrbrowser/actions/workflows/win_installer.yml)
+Basic scaffolding for visual Rapid-Application-Development of business-applications completely in Java. 
+
+- Github actions generate a variety of deployables with maven.
+JPMS-jlink-jpackaged installer's for Win/Mac/Linux, aot-compiled binaries with graal-vm, several browser-based variants, old-school excecutable jars.
+
+- Quickstart with WYSIWGY Gui-Editor ([Scene Builder](https://gluonhq.com/products/scene-builder/)) to help with getting into javaFx development.
+
+- Proof-of-concept application that connects to existing content-management servers running [apache-sling](https://sling.apache.org/), e.g [Adobe-AEM](https://business.adobe.com/products/experience-manager/adobe-experience-manager.html) via the  [Java-Content-Repositoriy API](https://dzone.com/articles/java-content-repository-best). Data-Maintenance for employees/CMS-authors with a user in the repository. No need to install anything on the server. 
+
+### How to run
+##### Requirements
+- java11+ 
+- maven 3.6.x
+
+Make sure `JAVA_HOME` is properly set to the Java installation directory.
+
+**Build the project**
+
+    mvn install
+
+Builds the modules.
+
+    
+**Run the project**
+
+    mvn -f modules/desktop/pom.xml exec:java
+
+or from spring-boot-maven-plugin:
+     
+    mvn -f modules/desktop/pom.xml spring-boot:run
+    
+or with the [javafx-maven-plugin](https://github.com/openjfx/javafx-maven-plugin)
+
+    mvn -f modules/desktop/pom.xml javafx:run
+ 
+Note that 'mvn javafx:jlink' won't work, as the application is not modularized due to non-modular dependencies.
+
+**Debug** (and prevent screen-grab from ide) [1]
+
+    mvn exec:exec -Dexec.executable=$JAVA_HOME"/bin/java" -Dexec.args="-classpath %classpath -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=1044 -Dglass.disableGrab=true org.motorbrot.javafxjcrbrowser.Main"
+    
+Wait for "Listening for transport dt_socket at address: 1044" and then connect the debugger to port 1044.
+
+### Sling server backend
+PoC application reads and writes it's data into an external server using http. On the serverside, the JCR api is exposed by "Apache Sling Simple WebDAV Servlet" in OSGi-config.
+
+Whether that's a sane thing to do is open for discussion. (It would be possible to use sling's [Default GET](https://sling.apache.org/documentation/bundles/rendering-content-default-get-servlets.html) and [Default POST](https://sling.apache.org/documentation/bundles/manipulating-content-the-slingpostservlet-servlets-post.html) servlets for the basic CRUD operations on the repository.)
+
+But using the familiar jcr-api also on the client gives the same access/view to the content as in the serverside development.
+It's fun putting a clean api behind a Spring Bean, mocking it with same [UnitTest mock's](https://sling.apache.org/documentation/development/jcr-mock.html)
+
+**Without a server** - think of JCR as just one example of any java api (SQL/JDBC driver, web-service-client, data from local file-system), that might come with additional dependencies, possibly not JPMS/jlink modularized yet.
+
+## Distribute win/mac/linux builds with github actions 
+
+See [ReadMe](./deploy/ReadMe.md) in the deploy folder. It contains maven setups to build deployable artifacts.
+Native installers or binaries can only be generated for the platform the build is running on. 
+You can only generate windows installers on windows, linux on linux, mac on mac. 
+That's when github action come handy as you can run them on each platform and take the resulting artivact .
+See .github/workflows/
+
+When you're logged into GitHub, you can go to 
+ >Actions > Workflow_for_your_machine > last run > Artifacts
+ 
+and download the binary.
+
+[![Windows MSI/EXE installers, executable jars](https://github.com/orx0815/openJfx-jcrbrowser/actions/workflows/win_installer.yml/badge.svg)](https://github.com/orx0815/openJfx-jcrbrowser/actions/workflows/win_installer.yml)
 [![Windows EXE](https://github.com/orx0815/openJfx-jcrbrowser/actions/workflows/win_native.yml/badge.svg)](https://github.com/orx0815/openJfx-jcrbrowser/actions/workflows/win_native.yml)
-[![Mac PKG/DMG installers, executable jars (platform dependent)](https://github.com/orx0815/openJfx-jcrbrowser/actions/workflows/mac_installer.yml/badge.svg)](https://github.com/orx0815/openJfx-jcrbrowser/actions/workflows/mac_installer.yml)
+[![Mac PKG/DMG installers, executable jars](https://github.com/orx0815/openJfx-jcrbrowser/actions/workflows/mac_installer.yml/badge.svg)](https://github.com/orx0815/openJfx-jcrbrowser/actions/workflows/mac_installer.yml)
 [![MacOS BIN](https://github.com/orx0815/openJfx-jcrbrowser/actions/workflows/mac_native.yml/badge.svg)](https://github.com/orx0815/openJfx-jcrbrowser/actions/workflows/mac_native.yml)
-[![Linux DEB/RPM installers, executable jars (platform dependent)](https://github.com/orx0815/openJfx-jcrbrowser/actions/workflows/linux_installer.yml/badge.svg)](https://github.com/orx0815/openJfx-jcrbrowser/actions/workflows/linux_installer.yml)
+[![Linux DEB/RPM installers, executable jars](https://github.com/orx0815/openJfx-jcrbrowser/actions/workflows/linux_installer.yml/badge.svg)](https://github.com/orx0815/openJfx-jcrbrowser/actions/workflows/linux_installer.yml)
 [![Linux BIN](https://github.com/orx0815/openJfx-jcrbrowser/actions/workflows/linux_native.yml/badge.svg)](https://github.com/orx0815/openJfx-jcrbrowser/actions/workflows/linux_native.yml)
+
+
+### Enterprisey Springboot
 
 This javaFX application itself is useless, it's just a PoC around the tooling - Rapid-Application-Development robot gui testing, springboot and deployment.
 
-This maven setup  generates a variety of deployment artifacts. It produces:
 
-- Old-school executable jars with dependencies included. Needs jvm installed.
-- Platform dependent installers with custom modularized jvm. On Windows .msi, on Mac .dmg or .pks, on Linux .deb or .rpm files.
-- Ahead-of-Time compiled native binaries generated by [GraalVm](https://www.graalvm.org/) using the [Gluon Client plugin](https://github.com/gluonhq/client-maven-plugin). No jvm needed anymore. 
-- JNLP generation and jar-signing for web-based installations from static webserver with [OpenWebStart](https://openwebstart.com/). Unlike java-8 [Oracle WebStart](https://en.wikipedia.org/wiki/Java_Web_Start), it has a jvm manager.
-- Web server to run it in the browser after all. This is a product from [jPro](https://www.jpro.one) and NOT free for commercial use. And not open-source. But quite impressive, you can try it out without any hassle by just adding their maven plugin.
- 
- All from the same code base.
- 
+
+
+
+
+
+
+
+
 ### Used frameworks, libraries 
 - Obviously [OpenJfx](https://openjfx.io/). JavaFX, but now open source.
 - Visual Rapid-Application-Development with [Scene Builder](https://gluonhq.com/products/scene-builder/), a WYSIWYG editor to generate [FXML](https://docs.oracle.com/javase/8/javafx/api/javafx/fxml/doc-files/introduction_to_fxml.html) from.
@@ -80,91 +147,10 @@ Note that 'mvn javafx:jlink' won't work, as the application is not modularized d
 
     mvn exec:exec -Dexec.executable=$JAVA_HOME"/bin/java" -Dexec.args="-classpath %classpath -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=1044 -Dglass.disableGrab=true org.motorbrot.javafxjcrbrowser.Main"
    
-***
 
-## Distribute
-
-Ways to produce installable artifacts. 
-
-
-    
-#### Build a distributable uber/fat.jar and run it:
-
-    mvn package
-Builds two jars, to be stated with `java -jar`
-
-The uber.jar is build by maven-shade-plugin, the fat.jar by [spring-boot-maven-plugin](https://docs.spring.io/spring-boot/docs/current/reference/html/executable-jar.html). (The latter has less but colored console output.)
-
-    java -jar ./target/openjfx-jcr-browser-0.0.1-SNAPSHOT-uber.jar
-    java -jar ./target/openjfx-jcr-browser-0.0.1-SNAPSHOT-fat.jar
-
-This is the 'old' style and still requires java to be installed on the target system. This is normally too much for normal users so the modern way is "bring your own jvm":
-
-####  Build platform dependent installers including custom small jvm
-Requires java14+ as the [jpackage](https://openjdk.java.net/jeps/392) tool is only available there.
-In java16 it moves from incubator state to a production-ready feature.
-
-Since the application is not modularized due to non-modular 3rd party dependencies, some extra steps are performed here. This is inspired by Dirk Lemmerman's [JPackageScriptFX](https://github.com/dlemmermann/JPackageScriptFX). You can only build an installer for the platform the maven build is running on.
-
-On Windows you need the [Wix Toolset](https://wixtoolset.org) installed on the machine for MSI installers. I had to enable .NET Framework 3.5 (Control Panel - Windows Features - check '.NET Framework 3.5'). Maven will find it, no need to open the program.
-For setup.exe style installers you'll need INNO setup. When running GitHub Actions both ist preinstalled on the VMsyou get when running 'windows-latest' 
-
-It's activated with separate maven build-* profiles:
-
-    mvn -P build-win package
-    mvn -P build-mac package
-    mvn -P build-linux package
-    
-In ./target/installer you'll find the .msi/.deb/.rpm/.dkp/.pkg for your platform.
-
-
-#### GraalVM
-Run with maven profile that uses gluon's [client-maven-plugin](https://github.com/gluonhq/client-maven-plugin) and [spring-native](https://github.com/spring-projects-experimental/spring-native) (they finally work together!) to generate AOT compiled executable. This doesn't even require a jvm at all anymore.
-
-Download [graalvm 21.0.x](https://github.com/graalvm/graalvm-ce-builds/releases)
-Set `GRAALVM_HOME` environment variable similar like setting `JAVA_HOME`
-Install additional software required, read [here](https://docs.gluonhq.com/#_platforms) on what's required on which platform.
-
-On ubuntu I have also installed libavcodec-dev libavformat-dev libavutil-dev libasound2-dev to make it work.
-
-On windows you'll need [Visual Studio 2019 Community Edition](https://visualstudio.microsoft.com/downloads) plus specific components.
-Maven needs to be started in `x64 Native Tools Command Prompt for VS 2019` NOT just the cmd or "Developer Command Prompt". Make sure it's x64. 
-
-    mvn -P spring-graal client:build
-    
-In ./target/client/PLATFORM you'll find the executeable.
    
-***
-#### Run in the browser with jPro (commercial license !)
-
-    mvn -P jpro jpro:release
-
-Extract the zip, go into the /bin folder and run start-script with java11 on the path.
-Visit http://localhost:8080
 
 
-#### Web Launcher with update mechanism
-
-For https://openwebstart.com/
-
-     mvn -P jnlp package
-     
-Signs all jar's with the example openwebstart.jks and generates a jnlp-file (with a very old webstart-maven-plugin) as a starting point. Remove the line:
-
-    codebase="http://motorbrot.org/404/jnlp"
-
-from ./target/jnlp/OpenJfxJcrBrowser.jnlp. When you have openwebstart installed on your machine you can doubleclick it and it will start. Add a proper codebase + jks and you can put it on a static webserver or shared network folder.
-
-Other notable alternatives:
-https://github.com/threerings/getdown
-https://github.com/edvin/fxlauncher
-
-***
-## github actions for win/mac/linux builds
-
-When you're logged into GitHub, you can go to 
- >Actions > Workflow_for_your_machine > last run > Artifacts
-and download the binary.
 
 
 ***
