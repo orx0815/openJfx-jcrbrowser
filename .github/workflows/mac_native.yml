@@ -28,7 +28,7 @@ jobs:
         GRAALVM_HOME: ${{ env.JAVA_HOME }}
         
     - name: Copy native client to staging
-      run: cp -r ./deploy/graalvm(target/client/x86_64-darwin/OpenJfxJcrBrowser* staging
+      run: cp -r ./deploy/graalvm/target/client/x86_64-darwin/OpenJfxJcrBrowser* staging
     - name: Upload
       uses: actions/upload-artifact@v2
       with:

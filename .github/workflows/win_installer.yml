@@ -18,8 +18,10 @@ jobs:
         
     - name: build modules
       run: mvn -P fast install
+      
     - name: Build with jpackage scripts
-      run: mvn -f ./deploy/jpackagefx/pom.xml package
+      working-directory: ./deploy/jpackagefx
+      run: mvn package
     
     # upload msi
     - name: Make msi-staging directory
