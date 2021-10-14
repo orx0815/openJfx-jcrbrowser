@@ -11,18 +11,21 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up JDK 15
+    - name: Set up JDK 17
       uses: actions/setup-java@v1
       with:
-        java-version: 15
+        java-version: 17
+        
+    - name: build modules
+      run: mvn -P fast install
     - name: Build with jpackage scripts
-      run: mvn -P build-win package
+      run: mvn -f ./deploy/jpackagefx/pom.xml package
     
     # upload msi
     - name: Make msi-staging directory
       run: mkdir msi-staging
     - name: Copy native msi to staging
-      run: cp -r target/installer/*.msi msi-staging     
+      run: cp -r ./deploy/jpackagefx/target/installer/*.msi msi-staging     
     - name: Upload msi
       uses: actions/upload-artifact@v2
       with:
@@ -33,22 +36,9 @@ jobs:
     - name: Make exe-staging directory
       run: mkdir exe-staging  
     - name: Copy native exe to staging
-      run: cp -r target/installer/*.exe exe-staging    
+      run: cp -r ./deploy/jpackagefx/target/installer/*.exe exe-staging    
     - name: Upload setup exe
       uses: actions/upload-artifact@v2
       with:
         name: windows setup.exe style installer
         path: exe-staging
-        
-    - name: Build plain fat/uber jars
-      run: mvn clean package    
-    # executable jars (platform dependent)    
-    - name: Platform dependent fat/uber jars
-      run: mkdir jar-staging
-    - name: Copy JARs to staging
-      run: cp target/*.jar jar-staging
-    - name: Upload
-      uses: actions/upload-artifact@v2
-      with:
-        name: excecuteable jars windows
-        path: jar-staging

@@ -11,17 +11,21 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up JDK 15
+    - name: Set up JDK 17
       uses: actions/setup-java@v1
       with:
-        java-version: 15
+        java-version: 17
+        
+    - name: Build modules
+      run: mvn -P fast install
+      
     - name: Build with Maven
-      run: mvn -P build-linux package
+      run: mvn -f ./deploy/jpackagefx/pom.xml package
       
     - name: Make deb-staging directory
       run: mkdir deb-staging
     - name: Copy native .deb to staging
-      run: cp -r target/installer/*.deb deb-staging
+      run: cp -r ./deploy/jpackagefx/target/installer/*.deb deb-staging
     - name: Upload
       uses: actions/upload-artifact@v2
       with:
@@ -31,7 +35,7 @@ jobs:
     - name: Make rpm-staging directory
       run: mkdir rpm-staging
     - name: Copy native .rpm to staging
-      run: cp -r target/installer/*.rpm rpm-staging
+      run: cp -r ./deploy/jpackagefx/target/installer/*.rpm rpm-staging
     - name: Upload
       uses: actions/upload-artifact@v2
       with:
@@ -39,11 +43,11 @@ jobs:
         path: rpm-staging    
         
     - name: Build plain fat/uber jars
-      run: mvn clean package    
+      run: mvn -f ./deploy/spring-boot-maven/pom.xml package    
     - name: upload platform dependent fat/uber jars
       run: mkdir jar-staging
     - name: Copy JARs to staging
-      run: cp target/*.jar jar-staging
+      run: cp ./deploy/spring-boot-maven/target/*.jar jar-staging
     - name: Upload
       uses: actions/upload-artifact@v2
       with:

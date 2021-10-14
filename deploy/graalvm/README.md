@@ -3,7 +3,7 @@
 #### GraalVM
 Runs with maven [gluonfx-plugin](hhttps://github.com/gluonhq/gluonfx-maven-plugin) and [spring-native](https://github.com/spring-projects-experimental/spring-native) (they finally work together!) to generate AOT compiled executable. This doesn't even require a jvm at all anymore.
 
-Download [graalvm 21.0.x](https://github.com/graalvm/graalvm-ce-builds/releases)
+Download [graalvm 21.2.x](https://github.com/graalvm/graalvm-ce-builds/releases)
 Set `GRAALVM_HOME` environment variable similar like setting `JAVA_HOME`
 Install additional software required, read [here](https://docs.gluonhq.com/#_platforms) on what's required on which platform.
 

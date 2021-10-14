@@ -25,20 +25,20 @@ The next jar by [spring-boot-maven-plugin](https://docs.spring.io/spring-boot/do
 This is the 'old' style and still requires java to be installed on the target system. This is normally too much for normal users so the modern way is "bring your own jvm".
 Jars are still platform dependent, javaFx has native dependencies for each platform.
 
+
 ####  Platform dependent installers including custom small jvm
+
 Requires java14+ as the [jpackage](https://openjdk.java.net/jeps/392) tool is only available there.
 In java16 it moved from incubator state to a production-ready feature.
 
 Since the application is not modularized due to non-modular 3rd party dependencies, some extra steps are performed here. This is inspired by Dirk Lemmerman's [JPackageScriptFX](https://github.com/dlemmermann/JPackageScriptFX). You can only build an installer for the platform the maven build is running on.
 
 On Windows you need the [Wix Toolset](https://wixtoolset.org) installed on the machine for MSI installers. I had to enable .NET Framework 3.5 (Control Panel - Windows Features - check '.NET Framework 3.5'). Maven will find it, no need to open the program.
-For setup.exe style installers you'll need INNO setup. When running GitHub Actions both ist preinstalled on the VMsyou get when running 'windows-latest' 
-
-It's activated with separate maven build-* profiles:
+For setup.exe style installers you'll need INNO setup. When running GitHub Actions both ist preinstalled on the VMs for you get when running 'windows-latest' 
 
     mvn -f ./jpackagefx/pom.xml package
     
-In ./target/installer you'll find the .msi/.deb/.rpm/.dkp/.pkg for your platform.
+In ./jpackagefx/target/installer you'll find the .msi/.deb/.rpm/.dkp/.pkg for your platform.
 
 
 #### GraalVm
