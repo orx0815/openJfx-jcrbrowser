@@ -4,7 +4,7 @@
 
   <artifactId>openjfx-jcr-browser.deploy.jpro.desktop</artifactId>
   <name>OpenJfxJcrBrowser-Desktop JPro server package</name>
-  <packaging>pom</packaging>
+  <packaging>jar</packaging>
   
   <parent>
     <groupId>org.motorbrot</groupId>
@@ -14,7 +14,7 @@
   </parent>
   
   <properties>
-    <jpro.version>2020.1.1</jpro.version>
+    <jpro.version>2021.2.0</jpro.version>
     <mainClassName>org.motorbrot.javafxjcrbrowser.JavaFxJcrBrowserApplication</mainClassName>
   </properties>
   
@@ -55,14 +55,14 @@
   <pluginRepositories>
     <pluginRepository>
       <id>jpro - sandec repository</id>
-      <url>https://sandec.bintray.com/repo</url>
+      <url>https://sandec.jfrog.io/artifactory/repo/</url>
     </pluginRepository>
   </pluginRepositories>
 
   <repositories>
     <repository>
       <id>jpro - sandec repository</id>
-      <url>https://sandec.bintray.com/repo</url>
+      <url>https://sandec.jfrog.io/artifactory/repo/</url>
     </repository>
   </repositories>
   
