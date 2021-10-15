@@ -1,5 +1,5 @@
 # This workflow will build a .deb installer
-name: Mac PKG/DMG installers, executable jars (platform dependent)
+name: Mac PKG/DMG installers and executable jars
 
 on:
   workflow_dispatch
@@ -51,13 +51,27 @@ jobs:
     - name: Build plain fat/uber jars
       run: mvn clean package    
     
-    # executable jars (platform dependent)    
+    # Excecuteable jars    
+    - name: Build plain spring-boot fat-jar
+      run: mvn -f ./deploy/spring-boot-maven/pom.xml package    
     - name: upload platform dependent fat/uber jars
       run: mkdir jar-staging
     - name: Copy JARs to staging
-      run: cp ./deploy/jpackagefx/target/*.jar jar-staging
+      run: cp ./deploy/spring-boot-maven/target/*-fat.jar jar-staging
     - name: Upload
       uses: actions/upload-artifact@v2
       with:
-        name: excecuteable jars mac
+        name: Excecuteable spring-boot jar for mac
         path: jar-staging
+        
+    - name: Build plain maven-shade uber-jar
+      run: mvn -f ./deploy/maven-shade/pom.xml package    
+    - name: upload platform dependent uber jar
+      run: mkdir maven-shade-staging
+    - name: Copy JARs to maven-shade-staging
+      run: cp ./deploy/spring-boot-maven/target/*-fat.jar maven-shade-staging
+    - name: Upload
+      uses: actions/upload-artifact@v2
+      with:
+        name: Excecuteable maven-shaded jar for mac
+        path: maven-shade-staging    

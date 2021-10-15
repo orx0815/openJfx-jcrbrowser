@@ -14,12 +14,12 @@ These maven projects  generates a variety of deployment artifacts:
 The uber.jar is build by maven-shade-plugin:
 
     mvn -f maven-shade/pom.xml package
-    java -jar ./maven-shade/target/openjfx-jcr-browser.deploy.shade.desktop-1.0.0-SNAPSHOT-uber.jar
+    java -jar ./maven-shade/target/openjfx-jcr-browser.deploy.shade.desktop-1.0.0-SNAPSHOT-[PLATFORM]-uber.jar
 
 The next jar by [spring-boot-maven-plugin](https://docs.spring.io/spring-boot/docs/current/reference/html/executable-jar.html). Different jar layout inside, default logging configuration in colour.
 
     mvn -f spring-boot-maven/pom.xml package
-    java -jar ./spring-boot-maven/target/openjfx-jcr-browser.deploy.spring-cli.desktop-1.0.0-SNAPSHOT.jar
+    java -jar ./spring-boot-maven/target/openjfx-jcr-browser.deploy.spring-cli.desktop-1.0.0-SNAPSHOT-[PLATFORM]-fat.jar
 
  
 This is the 'old' style and still requires java to be installed on the target system. This is normally too much for normal users so the modern way is "bring your own jvm".

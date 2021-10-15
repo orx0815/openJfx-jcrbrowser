@@ -23,10 +23,17 @@
   </dependencies>
   
   <build>
+    <extensions>
+      <extension>
+        <groupId>kr.motd.maven</groupId>
+        <artifactId>os-maven-plugin</artifactId>
+        <version>1.7.0</version>
+      </extension>
+    </extensions>
     <plugins>
       
       <!-- Excecutable jar with Maven Shade Plugin to generate an uber.jar with all dependencies included.
-            'java -jar target/openjfx-jcr-browser-1.0-SNAPSHOT-uber.jar'
+            'java -jar target/openjfx-jcr-browser.deploy.shade.desktop-1.0.0-SNAPSHOT-[PLATFORM]-uber.jar'
       -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -42,7 +49,7 @@
             <configuration>
                     
               <shadedArtifactAttached>true</shadedArtifactAttached>
-              <shadedClassifierName>uber</shadedClassifierName>
+              <shadedClassifierName>${os.detected.name}_${os.detected.arch}-uber</shadedClassifierName>
                     
               <transformers>
                 <!-- add Main-Class to manifest file -->

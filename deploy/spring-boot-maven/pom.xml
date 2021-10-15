@@ -15,11 +15,18 @@
   </parent>
     
   <build>
+    <extensions>
+      <extension>
+        <groupId>kr.motd.maven</groupId>
+        <artifactId>os-maven-plugin</artifactId>
+        <version>1.7.0</version>
+      </extension>
+    </extensions>
     <plugins>
       
       
       <!-- Same as maven-shade, but spring-plugin with better jar-layout
-           java -jar target/openjfx-jcr-browser-1.0-SNAPSHOT-fat.jar
+           java -jar target/openjfx-jcr-browser.deploy.spring-cli.desktop-1.0.0-SNAPSHOT-[PLATFORM]-fat.jar
       -->
       <plugin>
         <groupId>org.springframework.boot</groupId>
@@ -33,6 +40,7 @@
           </execution>
         </executions>
         <configuration>
+          <finalName>${project.artifactId}-${project.version}-${os.detected.name}_${os.detected.arch}-fat</finalName>
           <mainClass>${mainClassName}</mainClass>
           <layout>ZIP</layout>
         </configuration>

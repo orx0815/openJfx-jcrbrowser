@@ -1,5 +1,5 @@
 # This workflow will build a .deb installer
-name: Linux DEB/RPM installers, executable jars (platform dependent)
+name: Linux DEB/RPM installers, executable jars
 
 on:
   workflow_dispatch
@@ -42,14 +42,27 @@ jobs:
         name: linux .rpm installer
         path: rpm-staging    
         
-    - name: Build plain fat/uber jars
+    # Excecuteable jars    
+    - name: Build plain spring-boot fat-jar
       run: mvn -f ./deploy/spring-boot-maven/pom.xml package    
     - name: upload platform dependent fat/uber jars
       run: mkdir jar-staging
     - name: Copy JARs to staging
-      run: cp ./deploy/spring-boot-maven/target/*.jar jar-staging
+      run: cp ./deploy/spring-boot-maven/target/*-fat.jar jar-staging
     - name: Upload
       uses: actions/upload-artifact@v2
       with:
-        name: excecuteable jars linux
+        name: Excecuteable spring-boot jar for linux
         path: jar-staging
+        
+    - name: Build plain maven-shade uber-jar
+      run: mvn -f ./deploy/maven-shade/pom.xml package    
+    - name: upload platform dependent uber jar
+      run: mkdir maven-shade-staging
+    - name: Copy JARs to maven-shade-staging
+      run: cp ./deploy/spring-boot-maven/target/*-fat.jar maven-shade-staging
+    - name: Upload
+      uses: actions/upload-artifact@v2
+      with:
+        name: Excecuteable maven-shaded jar for linux
+        path: maven-shade-staging
