@@ -33,12 +33,13 @@
     
   <build>
     <plugins>
-      <!--  'mvn -Pjpro install' -->
+      <!--  'mvn jpro:run' -->
       <plugin>
         <groupId>com.sandec.jpro</groupId>
         <artifactId>jpro-maven-plugin</artifactId>
         <version>${jpro.version}</version>
         <configuration>
+          <port>8081</port>
           <visible>false</visible>
           <JVMArgs>
             <!-- <JVMArg>your-args</JVMArg> -->

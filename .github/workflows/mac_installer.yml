@@ -1,5 +1,5 @@
 # This workflow will build a .deb installer
-name: Mac PKG/DMG installers and executable jars
+name: Mac PKG/DMG installers, executable jars
 
 on:
   workflow_dispatch

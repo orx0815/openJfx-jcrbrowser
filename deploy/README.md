@@ -9,7 +9,7 @@ These maven projects  generates a variety of deployment artifacts:
  
  All from the same code base.
  
-#### Build a distributable uber/fat.jar and run it with `java -jar`
+## Build a distributable uber/fat.jar and run it with `java -jar`
 
 The uber.jar is build by maven-shade-plugin:
 
@@ -26,7 +26,7 @@ This is the 'old' style and still requires java to be installed on the target sy
 Jars are still platform dependent, javaFx has native dependencies for each platform.
 
 
-####  Platform dependent installers including custom small jvm
+##  Platform dependent installers including custom small jvm
 
 Requires java14+ as the [jpackage](https://openjdk.java.net/jeps/392) tool is only available there.
 In java16 it moved from incubator state to a production-ready feature.
@@ -41,17 +41,26 @@ For setup.exe style installers you'll need INNO setup. When running GitHub Actio
 In ./jpackagefx/target/installer you'll find the .msi/.deb/.rpm/.dkp/.pkg for your platform.
 
 
-#### GraalVm
+## GraalVm
 
 Deserves it's own [ReadMe](./graalvm/ReadMe.md)
 
 
-#### Run in the browser with jPro (commercial license !)
+## Run in the browser with jPro (commercial license !)
+
+Run with java11 from maven:
+
+    mvn -f ./jpro/pom.xml jpro:run
+    
+or generate a zip-file  
 
     mvn -f ./jpro/pom.xml jpro:release
 
-Extract the zip, go into the /bin folder and run start-script with java11 on the path.
-Visit http://localhost:8080
+Extract the zip, go into the /bin folder and run start-script with java11 (!) on the path.
+
+Open in browser: 
+http://localhost:8081 for an application instance
+http://localhost:8081/test/instances http://localhost:8081/test/stats for monitoring all instances
 
 
 #### Web Launcher with update mechanism
@@ -60,11 +69,44 @@ For https://openwebstart.com/
 
      mvn -f ./webstart/pom.xml package
      
-Signs all jar's with the example openwebstart.jks and generates a jnlp-file (with a very old webstart-maven-plugin) as a starting point. Remove the line:
+Signs all jar's with the example openwebstart.jks and generates a starting-point jnlp-file (with a very old webstart-maven-plugin) as a starting point.
+Some manual steps are reqired afterwards:
+
+Remove the line:
 
     codebase="http://motorbrot.org/404/jnlp"
 
-from ./target/jnlp/OpenJfxJcrBrowser.jnlp. When you have openwebstart installed on your machine you can doubleclick it and it will start. Add a proper codebase + jks and you can put it on a static webserver or shared network folder.
+from ./target/jnlp/OpenJfxJcrBrowser.jnlp. When you have openwebstart installed on your machine you can doubleclick it and it will start.
+
+Change java-version to '11+'
+
+    <j2se version="1.5+"/>
+
+
+JavaFx comes with native dependencies.
+You should delete all platform specific (-win,-mac, -linux) jars from resources-element and add them like this again:
+
+    <resources os="Windows" >
+      <jar href="javafx-base-15.0.1-win.jar"/>
+      <jar href="javafx-controls-15.0.1-win.jar"/>
+      <jar href="javafx-graphics-15.0.1-win.jar"/>
+      <jar href="javafx-fxml-15.0.1-win.jar"/>
+    </resources>
+    <resources os="Linux" >
+      <jar href="javafx-base-15.0.1-linux.jar"/>
+      <jar href="javafx-controls-15.0.1-linux.jar"/>
+      <jar href="javafx-graphics-15.0.1-linux.jar"/>
+      <jar href="javafx-fxml-15.0.1-linux.jar"/>
+    </resources>
+    <resources os="Mac\ OS\ X" >
+      <jar href="javafx-base-15.0.1-mac.jar"/>
+      <jar href="javafx-controls-15.0.1-mac.jar"/>
+      <jar href="javafx-graphics-15.0.1-mac.jar"/>
+      <jar href="javafx-fxml-15.0.1-mac.jar"/>
+    </resources>
+
+Add a proper codebase + jks and you can put it on a static webserver or shared network folder.
+
 
 Other notable alternatives:
 https://github.com/threerings/getdown
