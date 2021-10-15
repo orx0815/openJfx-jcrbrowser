@@ -20,7 +20,8 @@ jobs:
       run: mvn -P fast install
       
     - name: Build webstart zip with signed jars
-      run: mvn -f ./deploy/webstart/pom.xml package
+      working-directory: ./deploy/webstart
+      run: mvn package
       
     - name: Make webstart-staging directory
       run: mkdir webstart-staging

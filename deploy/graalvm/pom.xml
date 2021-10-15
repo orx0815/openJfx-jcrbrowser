@@ -62,7 +62,7 @@
             </configuration>
           </plugin>
           
-          <!--  'mvn -Pspring-graal client:build' -->
+          <!--  'mvn gluonfx:build' -->
           <plugin>
             <groupId>com.gluonhq</groupId>
             <artifactId>gluonfx-maven-plugin</artifactId>

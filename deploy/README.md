@@ -67,7 +67,8 @@ http://localhost:8081/test/instances http://localhost:8081/test/stats for monito
 
 For https://openwebstart.com/
 
-     mvn -f ./webstart/pom.xml package
+     cd ./webstart
+     mvn package
      
 Signs all jar's with the example openwebstart.jks and generates a starting-point jnlp-file (with a very old webstart-maven-plugin) as a starting point.
 Some manual steps are reqired afterwards:
