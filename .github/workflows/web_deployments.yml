@@ -25,14 +25,24 @@ jobs:
       
     - name: Make webstart-staging directory
       run: mkdir webstart-staging
-    - name: Copy native .deb to staging
-      run: cp -r ./deploy/webstart/target*.zip webstart-staging
+      
+    - name: Copy webstart-zip to staging
+      run: cp -r ./deploy/webstart/target/*.zip webstart-staging
     - name: Upload
       uses: actions/upload-artifact@v2
       with:
         name: webstart zip (needs edit of jnlp inside)
         path: webstart-staging
         
-    - name: Build jpro zip with server
+    - name: Build jpro-server zip
       run: mvn -f ./deploy/jpro/pom.xml jpro:release
-    
+      
+    - name: Make jpro-staging directory
+      run: mkdir jpro-staging
+    - name: Copy jpro-zip to staging  
+      run: cp -r ./deploy/jpro/target/*.zip jpro-staging
+    - name: Upload
+      uses: actions/upload-artifact@v2
+      with:
+        name: jpro-server zip
+        path: jpro-staging
