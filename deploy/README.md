@@ -63,7 +63,7 @@ http://localhost:8081 for an application instance
 http://localhost:8081/test/instances http://localhost:8081/test/stats for monitoring all instances
 
 
-#### Web Launcher with update mechanism
+## Web Launcher with update mechanism
 
 For https://openwebstart.com/
 

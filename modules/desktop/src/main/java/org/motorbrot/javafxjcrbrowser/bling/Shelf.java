@@ -15,8 +15,8 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.control.ScrollBar;
-//import javafx.scene.effect.PerspectiveTransform;
-//import javafx.scene.effect.Reflection;
+import javafx.scene.effect.PerspectiveTransform;
+import javafx.scene.effect.Reflection;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -244,7 +244,7 @@ class PerspectiveImage extends Parent {
   static final double HEIGHT = WIDTH + (WIDTH * REFLECTION_SIZE);
   private static final double RADIUS_H = WIDTH / 2;
   private static final double BACK = WIDTH / 10;
-//  private PerspectiveTransform transform = new PerspectiveTransform();
+  private PerspectiveTransform transform = new PerspectiveTransform();
   /**
    * Angle Property
    */
@@ -256,14 +256,14 @@ class PerspectiveImage extends Parent {
       double rx = (RADIUS_H + Math.sin(Math.toRadians(angle.get())) * RADIUS_H + 1);
       double uly = (-Math.cos(Math.toRadians(angle.get())) * BACK);
       double ury = -uly;
-//      transform.setUlx(lx);
-//      transform.setUly(uly);
-//      transform.setUrx(rx);
-//      transform.setUry(ury);
-//      transform.setLrx(rx);
-//      transform.setLry(HEIGHT + uly);
-//      transform.setLlx(lx);
-//      transform.setLly(HEIGHT + ury);
+      transform.setUlx(lx);
+      transform.setUly(uly);
+      transform.setUrx(rx);
+      transform.setUry(ury);
+      transform.setLrx(rx);
+      transform.setLry(HEIGHT + uly);
+      transform.setLlx(lx);
+      transform.setLly(HEIGHT + ury);
     }
   };
 
@@ -281,10 +281,10 @@ class PerspectiveImage extends Parent {
 
   public PerspectiveImage(Image image) {
     ImageView imageView = new ImageView(image);
-//    Reflection reflection = new Reflection();
-//    reflection.setFraction(REFLECTION_SIZE);
-//    imageView.setEffect(reflection);
-//    setEffect(transform);
+    Reflection reflection = new Reflection();
+    reflection.setFraction(REFLECTION_SIZE);
+    imageView.setEffect(reflection);
+    setEffect(transform);
     getChildren().addAll(imageView);
   }
 }

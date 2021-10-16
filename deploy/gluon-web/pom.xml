@@ -1,75 +1,82 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-  <artifactId>openjfx-jcr-browser.deploy.graalvm.desktop</artifactId>
-  <packaging>jar</packaging>
+    <modelVersion>4.0.0</modelVersion>
 
-  <name>OpenJfxJcrBrowser-Desktop-Graalvm-bin</name>
-  
-  <parent>
-    <groupId>org.motorbrot</groupId>
-    <artifactId>openjfx-jcr-browser.parent</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-    <relativePath>../../pom.xml</relativePath>
-  </parent>
-  
-  <properties>
-    <mainClassName>org.motorbrot.graalvm.Main</mainClassName>
-    <java.version>11</java.version>
-    <maven.compiler.source>11</maven.compiler.source>
-    <maven.compiler.target>11</maven.compiler.target>
-  </properties>
-  
-  <dependencies>
-    <dependency>
-      <groupId>org.motorbrot</groupId>
-      <artifactId>openjfx-jcr-browser.desktop</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
-    </dependency>
-        
-    <dependency>
-      <groupId>org.springframework.experimental</groupId>
-      <artifactId>spring-native</artifactId>
-      <version>0.10.4</version>
-    </dependency>
-         
-  </dependencies>
+    <artifactId>openjfx-jcr-browser.deploy.gluon-web.desktop</artifactId>
+    <packaging>jar</packaging>
     
-  <build>
-        <plugins>
+    <parent>
+      <groupId>org.motorbrot</groupId>
+      <artifactId>openjfx-jcr-browser.parent</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
+      <relativePath>../../pom.xml</relativePath>
+    </parent>
 
-          <plugin>
-            <groupId>org.springframework.experimental</groupId>
-            <artifactId>spring-aot-maven-plugin</artifactId>
-            <version>0.10.1</version>
-            <executions>
-              <execution>
-                <id>test-generate</id>
-                <goals>
-                  <goal>test-generate</goal>
-                </goals>
-              </execution>
-              <execution>
-                <id>generate</id>
-                <goals>
-                  <goal>generate</goal>
-                </goals>
-              </execution>
-            </executions>
-            <configuration>
-              <mainClass>${mainClassName}</mainClass>
-            </configuration>
-          </plugin>
-          
-          <!--  'mvn gluonfx:build' -->
-          <plugin>
+    <name>OpenJfxJcrBrowser-Desktop-Gluon-Web</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <javafx.version>17.0.0.1</javafx.version>
+        <javafx.plugin.version>0.0.6</javafx.plugin.version>
+        <gluonfx.plugin.version>1.0.7</gluonfx.plugin.version>
+        <mainClassName>org.motorbrot.gluonweb.Main</mainClassName>
+    </properties>
+
+    <dependencies>
+        <dependency>
+          <groupId>org.motorbrot</groupId>
+          <artifactId>openjfx-jcr-browser.desktop</artifactId>
+          <version>1.0.0-SNAPSHOT</version>
+            <exclusions>
+                
+                <!--
+                
+                Compiles with these exclusions but does not work without them :(
+                
+                -->
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.jackrabbit</groupId>
+                    <artifactId>jackrabbit-spi-commons</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-beans</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <release>11</release>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>${javafx.plugin.version}</version>
+                <configuration>
+                    <mainClass>${mainClassName}</mainClass>
+                </configuration>
+            </plugin>
+            <plugin>
             <groupId>com.gluonhq</groupId>
             <artifactId>gluonfx-maven-plugin</artifactId>
-            <version>1.0.7</version>
+            <version>${gluonfx.plugin.version}</version>
             <configuration>
-              <!-- Uncomment to run on iOS: -->
-              <!-- <target>ios</target>-->
+
+               <target>web</target>
           
               <reflectionList>
                 <list>javafx.fxml.FXMLLoader</list>
@@ -116,7 +123,6 @@
                 
                 <list>org.apache.http.impl.auth.BasicScheme</list>
                 <list>org.apache.http.impl.auth.RFC2617Scheme</list>
-                
                   
               </reflectionList>
               <nativeImageArgs>
@@ -130,28 +136,16 @@
               <mainClass>${mainClassName}</mainClass>
             </configuration>
           </plugin>
-          
-          <plugin>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-maven-plugin</artifactId>
-            <version>0.0.5</version>
-            <configuration>
-              <mainClass>${mainClassName}</mainClass>
-            </configuration>
-          </plugin>
+            
         </plugins>
-      </build>
-      <repositories>
+    </build>
+
+    <repositories>
         <repository>
-          <id>SpringIo Release Repository</id>
-          <url>https://repo.spring.io/release</url>
+            <id>gluon-nexus</id>
+            <url>https://nexus.gluonhq.com/nexus/content/repositories/releases/</url>
         </repository>
-      </repositories>
-      <pluginRepositories>
-        <pluginRepository>
-          <id>SpringIo Release Repository</id>
-          <url>https://repo.spring.io/release</url>
-        </pluginRepository>
-      </pluginRepositories>
-  
+    </repositories>
+
+
 </project>
