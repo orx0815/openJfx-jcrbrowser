@@ -25,6 +25,7 @@ import javax.jcr.PropertyType;
 import javax.jcr.RepositoryException;
 import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
+import org.apache.jackrabbit.commons.JcrUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -52,22 +53,33 @@ public class JcrTreeSelectionListener implements ChangeListener<TreeItem<Node>> 
     }
     try {
       final Node jcrNode = new_val.getValue();
+      String jcrType = JcrUtils.getStringProperty(jcrNode, "jcr:primaryType", null);
+      String slingResourceType = JcrUtils.getStringProperty(jcrNode, "sling:resourceType", null);
       
-      if (jcrNode.hasProperty("jcr:primaryType") && "dam:Asset".equals(jcrNode.getProperty("jcr:primaryType").getString())) {
+      if ("dam:Asset".equals(jcrType)) {
         Node rendition = jcrNode.getNode("jcr:content/renditions/cq5dam.thumbnail.319.319.png/jcr:content");
         if (rendition.hasProperty("jcr:data")) {
           Binary binary = rendition.getProperty("jcr:data").getBinary();
-          InputStream is = binary.getStream();
-          Image image = new Image(is);
-          parent.getDamImageView().setImage(image);
-          blingTabController.getDisplayShelf().addImage(image);
+          throwImgBinarytoGui(binary);
         }
-      } else if (jcrNode.hasProperty("sling:resourceType") && "javafxjcrbrowser:sample".equals(jcrNode.getProperty("sling:resourceType").getString())) {
+      }
+      else if ("javafxjcrbrowser:sample".equals(slingResourceType)) {
+        // nodeType uploaded via uploadtestContent.sh 
         if (jcrNode.hasProperty("csvBlob")) {
           Binary binary = jcrNode.getProperty("csvBlob").getBinary();
           InputStream is = binary.getStream();
-                    
+          parent.switchToTab(1);
           csvTabController.loadCvsTable(is, jcrNode.getPath());
+        }
+      }
+      else if ("sling:File".equals(slingResourceType)) {
+        Node contentNode = JcrUtils.getNodeIfExists(jcrNode, "jcr:content");
+        if (contentNode != null) {
+          String mime = JcrUtils.getStringProperty(contentNode, "jcr:mimeType", "");
+          if (mime.startsWith("image")) {
+            Binary binary = JcrUtils.getBinaryProperty(contentNode, "jcr:data", null);
+            throwImgBinarytoGui(binary);
+          }
         }
       }
       
@@ -79,6 +91,14 @@ public class JcrTreeSelectionListener implements ChangeListener<TreeItem<Node>> 
       LOG.log(Level.SEVERE, null, ex);
       parent.getDebugTxt().appendText(ex.getMessage()+"\n");
     }
+  }
+
+  private void throwImgBinarytoGui(Binary binary) throws RepositoryException {
+    InputStream is = binary.getStream();
+    Image image = new Image(is, 0, 200, true, false);
+    parent.getDamImageView().setImage(image);
+    parent.switchToTab(2);
+    blingTabController.getDisplayShelf().addImage(image);
   }
 
   private void updateNodePropertyTable(final Node jcrNode) throws RepositoryException, IllegalStateException {

@@ -85,9 +85,9 @@ public class JcrBrowserSceneController {
    * The initialize method is called after all @FXML annotated members have been injected. 
    */
   public void initialize() {
-
+    
     // switch to tab 3
-    tabPane.getSelectionModel().select(2);
+    switchToTab(2);
     
     // javafx-bindings ofr login-state
     BooleanBinding sessionExists = Bindings.createBooleanBinding(() -> {
@@ -115,6 +115,10 @@ public class JcrBrowserSceneController {
     // litte trick, requestFocus doesn't work in initialize
     Platform.runLater(loginButton::requestFocus); // for quickly pressing enter
 
+  }
+
+  public void switchToTab(int tabIndex) {
+    tabPane.getSelectionModel().select(tabIndex);
   }
 
   @FXML
