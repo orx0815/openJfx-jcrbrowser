@@ -83,7 +83,7 @@
                 <list>org.motorbrot.javafxjcrbrowser.JavaFxJcrBrowserApplication</list>
                 <list>org.motorbrot.javafxjcrbrowser.JcrBrowserSceneController</list>
                 <list>org.motorbrot.javafxjcrbrowser.jcrpanel.JcrPanelController</list>
-                <list>org.motorbrot.javafxjcrbrowser.xmlexport.XmlExportTabController</list>
+                <list>org.motorbrot.javafxjcrbrowser.contentupdate.JcrMigrationTabController</list>
                 <list>org.motorbrot.javafxjcrbrowser.csv.CsvTabController</list>
                 <list>org.motorbrot.javafxjcrbrowser.bling.BlingTabController</list>
 

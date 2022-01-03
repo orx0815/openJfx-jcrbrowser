@@ -57,7 +57,7 @@
             <TextField fx:id="workSpaceField" prefHeight="28.0" prefWidth="137.0" promptText="username" text="default" />
             <Label prefHeight="26.0" prefWidth="175.0" text="e.g 'default' or 'crx.default'" />
             <Region prefHeight="28.0" prefWidth="52.0" HBox.hgrow="ALWAYS" />
-            <Button fx:id="loginButton" contentDisplay="TOP" mnemonicParsing="false" onAction="#loginButtonPressed" text="Login">
+            <Button fx:id="loginButton" contentDisplay="TOP" mnemonicParsing="false" onAction="#loginButtonPressed" prefHeight="28.0" prefWidth="69.0" text="Login">
                <HBox.margin>
                   <Insets right="20.0" />
                </HBox.margin>
@@ -82,6 +82,15 @@
             </Label>
             <TextField fx:id="jcrUrlField" prefHeight="26.0" prefWidth="482.0" promptText="username" text="http://localhost:8080/server" />
             <Label prefHeight="26.0" prefWidth="460.0" text="e.g http://localhost:8080/server or http://localhost:4502/crx/server" />
+            <Region prefHeight="28.0" prefWidth="52.0" HBox.hgrow="ALWAYS" />
+            <Button fx:id="refreshButton" contentDisplay="TOP" mnemonicParsing="false" onAction="#refreshButtonPressed" prefHeight="28.0" prefWidth="78.0" text="Refresh">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <HBox.margin>
+                  <Insets right="20.0" />
+               </HBox.margin>
+            </Button>
          </children>
          <VBox.margin>
             <Insets />
@@ -136,9 +145,9 @@
                           <fx:include fx:id="blingTab" source="BlingTab.fxml" />
                         </content>
                       </Tab>
-                      <Tab text="XML Export">
+                      <Tab text="Content Update Task">
                         <content>
-                          <fx:include fx:id="xmlExportTab" source="XmlExportTab.fxml" />
+                          <fx:include source="AsyncContentUpdateTab.fxml" fx:id="asyncContentUpdateTab" />
                         </content>
                       </Tab>
                     </tabs>

@@ -61,10 +61,13 @@ public class JcrBrowserSceneController {
 
   @FXML
   private ImageView damImageView;
+  
+  @FXML
+  private Button refreshButton;
 
   
   /*
-    NESTED CONTROLLERS  (Commented out but keep to show non-spring fxml way to inject inner controllers)
+    NESTED CONTROLLERS  (Commented out but kept to show non-spring fxml way to inject inner controllers)
 
     Current spring-autowiring of fxml-controllers uses singletons.
     So it's not possible to inject two different controllers with the same fxml
@@ -78,8 +81,6 @@ public class JcrBrowserSceneController {
 //  private CsvTabController csvTabController;
 //  @FXML
 //  private BlingTabController blingTabController;
-//  @FXML
-//  private XmlExportTabController xmlExportTabController;
 
   /**
    * The initialize method is called after all @FXML annotated members have been injected. 
@@ -89,7 +90,7 @@ public class JcrBrowserSceneController {
     // switch to tab 3
     switchToTab(2);
     
-    // javafx-bindings ofr login-state
+    // javafx-bindings for login-state
     BooleanBinding sessionExists = Bindings.createBooleanBinding(() -> {
       return jcrService.getJcrSessionProperty().get() != null; 
     }, jcrService.getJcrSessionProperty()); // observe session
@@ -100,6 +101,7 @@ public class JcrBrowserSceneController {
     passwdField.disableProperty().bind(sessionExists);
     workSpaceField.disableProperty().bind(sessionExists);
     jcrUrlField.disableProperty().bind(sessionExists);
+    refreshButton.disableProperty().bind(sessionExists.not());
     
     StringBinding loginButtonBinding = Bindings.createStringBinding(() -> {
       if (jcrService.getJcrSessionProperty().get() != null) {
@@ -198,6 +200,19 @@ public class JcrBrowserSceneController {
    */
   public ImageView getDamImageView() {
     return damImageView;
+  }
+
+  @FXML
+  private void refreshButtonPressed(ActionEvent event) {
+    if (jcrService.getJcrSession() != null) {
+      try {
+        jcrService.getJcrSession().refresh(true);
+      }
+      catch (RepositoryException ex) {
+        LOG.log(Level.SEVERE, null, ex);
+        debugTxt.appendText("RepositoryException: " + ex.getMessage() + "\n");
+      }
+    }
   }
 
   

@@ -34,3 +34,4 @@ maven-eclipse.xml
 /deploy/jpro/target/
 /deploy/graalvm/target/
 /deploy/gluon-web/target/
+/modules/core-jcr2dav-cli/target/

@@ -34,7 +34,7 @@
   </properties>
     
   <modules>
-    <!--module>modules/core</module-->
+    <module>modules/core-jcr2dav-cli</module>
     <module>modules/desktop</module>
     <module>deploy/maven-shade</module>
     <module>deploy/spring-boot-maven</module>

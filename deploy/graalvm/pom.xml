@@ -76,7 +76,7 @@
                 <list>org.motorbrot.javafxjcrbrowser.JavaFxJcrBrowserApplication</list>
                 <list>org.motorbrot.javafxjcrbrowser.JcrBrowserSceneController</list>
                 <list>org.motorbrot.javafxjcrbrowser.jcrpanel.JcrPanelController</list>
-                <list>org.motorbrot.javafxjcrbrowser.xmlexport.XmlExportTabController</list>
+                <list>org.motorbrot.javafxjcrbrowser.contentupdate.JcrMigrationTabController</list>
                 <list>org.motorbrot.javafxjcrbrowser.csv.CsvTabController</list>
                 <list>org.motorbrot.javafxjcrbrowser.bling.BlingTabController</list>
 
@@ -110,6 +110,7 @@
                 <list>javafx.scene.control.ColorPicker</list>
                 <list>javafx.scene.layout.Pane</list>
                 <list>javafx.scene.layout.VBox</list>
+                <list>javafx.scene.text.Font</list>
                 
                 <list>com.sun.scenario.effect.impl.prism.ps.PPSPerspectiveTransformPeer</list>
                 <list>com.sun.scenario.effect.impl.prism.PrReflectionPeer</list>

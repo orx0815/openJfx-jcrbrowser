@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>openjfx-jcr-browser.cli</artifactId>
+  <packaging>jar</packaging>
+
+  <name>OpenJfxJcrBrowser-Command Line Interface</name>
+  
+  <properties>
+    <mainClassName>org.motorbrot.javafxjcrbrowser.cli.JcrMigration</mainClassName>
+  </properties>
+  
+  <parent>
+    <groupId>org.motorbrot</groupId>
+    <artifactId>openjfx-jcr-browser.parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <relativePath>../../pom.xml</relativePath>
+  </parent>
+    
+  <build>
+    <plugins>
+
+      <!-- Run the app with 'mvn exec:java' -->          
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.6.0</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>java</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <mainClass>${mainClassName}</mainClass>
+        </configuration>
+      </plugin>
+      
+      <!-- Excecutable jar with Maven Shade Plugin to generate an uber.jar with all dependencies included.
+            'java -jar target/openjfx-jcr-browser.deploy.shade.desktop-1.0.0-SNAPSHOT-[PLATFORM]-uber.jar'
+      -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.2.4</version>
+        <executions>
+          <!-- Run shade goal on package phase -->
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+                    
+              <shadedArtifactAttached>true</shadedArtifactAttached>
+              <shadedClassifierName>-uber</shadedClassifierName>
+                    
+              <transformers>
+                <!-- add Main-Class to manifest file -->
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>${mainClassName}</mainClass>
+                </transformer>
+
+                <!--  each ImageIO plugin JAR contains multiple resources under META-INF/services.
+                These resources are needed for automatic discovery of the ImageIO plugins.
+                When you unpack all the JAR files into a single folder, these will be overwritten for each JAR.
+                Instead, the resources with the same name needs to be merge into a new, single resource by ServicesResourceTransformer. -->
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                      
+                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                  <resource>META-INF/spring.handlers</resource>
+                </transformer>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                  <resource>META-INF/spring.schemas</resource>
+                </transformer>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                  <resource>META-INF/spring.factories</resource>
+                </transformer>
+
+              </transformers>
+              <createDependencyReducedPom>false</createDependencyReducedPom>
+
+              <!-- do not copy any (tika/bouncycastle) jar-signature files into uber.jar, as they cause
+              SecurityException: Invalid signature file digest for Manifest main attributes -->
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+     
+    </plugins>
+  </build>
+      
+  
+  <!-- ====================================================================== -->
+  <!-- D E P E N D E N C I E S -->
+  <!-- ====================================================================== -->  
+  <dependencies>
+       
+    <!-- JCR and jackrabbit-jcr2dav -->    
+    <dependency>
+      <groupId>javax.jcr</groupId>
+      <artifactId>jcr</artifactId>
+      <version>2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.jackrabbit</groupId>
+      <artifactId>jackrabbit-jcr2dav</artifactId>
+      <version>${jackrabbit.version}</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>commons-cli</groupId>
+      <artifactId>commons-cli</artifactId>
+      <version>1.5.0</version>
+    </dependency>
+        
+  </dependencies>
+
+</project>

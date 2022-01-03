@@ -43,7 +43,7 @@ In ./jpackagefx/target/installer you'll find the .msi/.deb/.rpm/.dkp/.pkg for yo
 
 ## GraalVm
 
-Deserves it's own [ReadMe](./graalvm/ReadMe.md)
+Deserves it's own [ReadMe](./graalvm/README.md)
 
 
 ## Run in the browser with jPro (commercial license !)
