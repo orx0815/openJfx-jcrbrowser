@@ -7,14 +7,17 @@ jobs:
   build:
     runs-on: macOS-latest
     steps:
-    - uses: maxim-lobanov/setup-xcode@v1
+    - uses: actions/checkout@v3
+    - uses: gluonhq/setup-graalvm@master
+      # set GITHUB_TOKEN to avoid exceeding GitHub's API rate limit
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        xcode-version: '11.7.0'
-    - uses: actions/checkout@v2
-    - name: Setup GraalVM environment
-      uses: DeLaGuardo/setup-graalvm@master
-      with:
-        graalvm-version: '21.2.0.java11'
+        # GraalVM version. Default: latest
+        graalvm: '22.0.0.2-Final'
+        # Java version. Since GraalVM 22, either java11 or java17, before GraalVM 22, empty. Default: java17
+        jdk: 'java11'
+    - run: java -version
     
     - name: build modules
       run: mvn -P fast install

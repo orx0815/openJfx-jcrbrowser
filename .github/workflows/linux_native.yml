@@ -7,7 +7,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@latest
+    - uses: actions/checkout@v3
     - uses: gluonhq/setup-graalvm@master
       # set GITHUB_TOKEN to avoid exceeding GitHub's API rate limit
       env:
@@ -19,7 +19,7 @@ jobs:
         jdk: 'java11'
     - run: java -version
 
-    - name: APT update
+    - name: APT update for Missing linker libraries
       run: sudo apt update  
     - name: Install libraries
       run: sudo apt install libasound2-dev libavcodec-dev libavformat-dev libavutil-dev libgl-dev libgtk-3-dev libpango1.0-dev libxtst-dev
