@@ -66,7 +66,7 @@
           <plugin>
             <groupId>com.gluonhq</groupId>
             <artifactId>gluonfx-maven-plugin</artifactId>
-            <version>1.0.7</version>
+            <version>1.0.12</version>
             <configuration>
               <!-- Uncomment to run on iOS: -->
               <!-- <target>ios</target>-->
