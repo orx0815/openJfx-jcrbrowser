@@ -17,6 +17,7 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
 import javafx.util.Callback;
 import javax.jcr.Node;
+import org.motorbrot.javafxjcrbrowser.SceneIncludeController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,10 +25,7 @@ import org.springframework.stereotype.Component;
  *  Left panel, jcr-tree with node-properties table below
  */
 @Component
-public class JcrPanelController {
-  
-  @Autowired
-  private JcrBrowserSceneController jcrBrowserSceneController;
+public class JcrPanelController extends SceneIncludeController {
   
   @Autowired
   private JcrTreeSelectionListener jcrTreeSelectionListener;
@@ -49,8 +47,10 @@ public class JcrPanelController {
     String msg = "- initializing JcrPanel  -";
     Logger.getLogger(getClass().getName()).log(Level.INFO, msg);
     
+    jcrTreeSelectionListener.setJcrPanelController(this);
+    
     // Fx-Tree gets filled by jcr-Tree
-    fxTree.setCellFactory(treeView -> new JcrTreeCell(jcrBrowserSceneController.getRootPathField().getText()));
+    fxTree.setCellFactory(treeView -> new JcrTreeCell(getParent().getRootPathField().getText()));
     
     // Define that propsTable displays the jcr-properties from selected TreeNode. 
     // The map-entries come from JcrTreeSelectionListener.jcrPropsToFxMap()

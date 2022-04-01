@@ -1,6 +1,6 @@
 package org.motorbrot.javafxjcrbrowser.csv;
 
-import org.motorbrot.javafxjcrbrowser.JcrBrowserSceneController;
+import org.motorbrot.javafxjcrbrowser.SceneIncludeController;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -29,19 +29,15 @@ import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 
 /**
  * FXML Controller class
  */
-@Controller
-public class CsvTabController {
+@Component
+public class CsvTabController extends SceneIncludeController {
 
   private static final Logger LOG = Logger.getLogger(CsvTabController.class.getName());
-    
-  @Autowired
-  private JcrBrowserSceneController jcrBrowserSceneController;
   
   @FXML
   private Button fileButton;
@@ -49,7 +45,7 @@ public class CsvTabController {
   private Label fileLabel;
   @FXML
   private TableView<ObservableList<StringProperty>> csvTableView;
-  
+
   @FXML
   private void fileButtonClicked(ActionEvent event) {
 
@@ -63,7 +59,7 @@ public class CsvTabController {
       }
       catch (FileNotFoundException ex) {
         LOG.log(Level.SEVERE, null, ex);
-        jcrBrowserSceneController.getDebugTxt().appendText("ex: " + ex.getMessage() + "\n");
+        getParent().getDebugTxt().appendText("ex: " + ex.getMessage() + "\n");
         return;
       }
 
@@ -92,7 +88,7 @@ public class CsvTabController {
       }
       catch (IOException ex) {
         LOG.log(Level.SEVERE, null, ex);
-        jcrBrowserSceneController.getDebugTxt().appendText("ex: " + ex.getMessage() + "\n");
+        getParent().getDebugTxt().appendText("ex: " + ex.getMessage() + "\n");
         return;
       }
       finally {

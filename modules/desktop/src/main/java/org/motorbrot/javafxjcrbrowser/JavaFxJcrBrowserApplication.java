@@ -24,7 +24,7 @@ public class JavaFxJcrBrowserApplication extends Application {
   private static final Logger LOG = Logger.getLogger(JavaFxJcrBrowserApplication.class.getName());
 
   private ConfigurableApplicationContext springContext;
-
+  
   @Override
   public void start(Stage stage) throws Exception {
 
@@ -37,8 +37,7 @@ public class JavaFxJcrBrowserApplication extends Application {
       .run(SpringDIConfiguration.class);
       
     // load fxml
-    LOG.info("Load fxml");
-    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(MAIN_FXML_RESOURCE_PATH));
+    FXMLLoader fxmlLoader = new FXMLLoader();
 
     // inject spring services into fxml controllers
     
@@ -59,6 +58,8 @@ public class JavaFxJcrBrowserApplication extends Application {
         return springContext.getBean(param);
       }
     });
+    LOG.info("Load fxml");
+    fxmlLoader.setLocation(getClass().getResource(MAIN_FXML_RESOURCE_PATH));
 
     Parent root = fxmlLoader.load();
     Scene scene = new Scene(root);

@@ -72,7 +72,7 @@
       <plugin>
             <groupId>org.openjfx</groupId>
           <artifactId>javafx-maven-plugin</artifactId>
-          <version>0.0.5</version>
+          <version>0.0.8</version>
           <configuration>
               <mainClass>${mainClassName}</mainClass>
           </configuration>
@@ -87,7 +87,7 @@
             <path>
               <groupId>org.springframework</groupId>
               <artifactId>spring-context-indexer</artifactId>
-              <version>5.3.2</version>
+              <version>5.3.16</version>
             </path>
           </annotationProcessorPaths>
         </configuration>

@@ -14,25 +14,23 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
+import org.motorbrot.javafxjcrbrowser.SceneIncludeController;
 import org.motorbrot.javafxjcrbrowser.cli.JcrMigrationTask.ActivityCallback;
 import org.motorbrot.javafxjcrbrowser.cli.JcrMigrationTask.JcrMigrationParameters;
 import org.motorbrot.javafxjcrbrowser.cli.JcrMigrationTask.JcrMigrationResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 
 /**
  * FXML Controller class
  */
-@Controller
-public class JcrMigrationTabController {
+@Component
+public class JcrMigrationTabController extends SceneIncludeController {
 
   private static final Logger LOG = Logger.getLogger(JcrMigrationTabController.class.getName());
 
   @Autowired
   private JcrService jcrService;
-
-  @Autowired
-  private JcrBrowserSceneController jcrBrowserSceneController;
 
   @Autowired
   private JcrPanelController jcrPanelController;
@@ -56,7 +54,7 @@ public class JcrMigrationTabController {
   private void runButtonClicked(ActionEvent event) {
     
     if (backgroundService != null && backgroundService.isRunning()) {
-      jcrBrowserSceneController.getDebugTxt().appendText("Stopping content upadate job.\n");
+      getParent().getDebugTxt().appendText("Stopping content upadate job.\n");
       backgroundService.cancel();
       runTaskButton.setText("Start");
     } else {
@@ -77,19 +75,19 @@ public class JcrMigrationTabController {
             backgroundService = new JcrUpdateConcurrentService(jcrMigrationParameters, new ActivityCallback() {
               @Override
               public void logActivity(String msg) {
-                jcrBrowserSceneController.getDebugTxt().appendText(msg + "\n");
+                getParent().getDebugTxt().appendText(msg + "\n");
               }
             });
             backgroundService.setOnSucceeded((WorkerStateEvent evt) -> {
-              jcrBrowserSceneController.getDebugTxt().appendText("Task finnished: " + JcrMigrationResult.FINNISHED_STATE + "\n");
+              getParent().getDebugTxt().appendText("Task finnished: " + JcrMigrationResult.FINNISHED_STATE + "\n");
               runTaskButton.setText("Start");
             });
             backgroundService.setOnFailed((WorkerStateEvent evt) -> {
-              jcrBrowserSceneController.getDebugTxt().appendText("Task finnished: " + JcrMigrationResult.FAILED_STATE + "\n");
+              getParent().getDebugTxt().appendText("Task finnished: " + JcrMigrationResult.FAILED_STATE + "\n");
               runTaskButton.setText("Start");
             });
             backgroundService.setOnCancelled((WorkerStateEvent evt) -> {
-              jcrBrowserSceneController.getDebugTxt().appendText("Task finnished: " + JcrMigrationResult.CANCELED_STATE + "\n");
+              getParent().getDebugTxt().appendText("Task finnished: " + JcrMigrationResult.CANCELED_STATE + "\n");
               runTaskButton.setText("Start");
             });
             
@@ -98,18 +96,18 @@ public class JcrMigrationTabController {
 
           }
           catch (RepositoryException ex) {
-            jcrBrowserSceneController.getDebugTxt().appendText("Saving Session failed: " + ex.getMessage() + "\n");
+            getParent().getDebugTxt().appendText("Saving Session failed: " + ex.getMessage() + "\n");
             LOG.log(Level.SEVERE, null, ex);
           }
 
         }
         else {
-          jcrBrowserSceneController.getDebugTxt().appendText("No jcrNode found in tree.\n");
+          getParent().getDebugTxt().appendText("No jcrNode found in tree.\n");
           LOG.log(Level.SEVERE, "No jcrNode behind fxTreeItem.");
         }
       }
       else {
-        jcrBrowserSceneController.getDebugTxt().appendText("No jcrNode selected in Tree.\n");
+        getParent().getDebugTxt().appendText("No jcrNode selected in Tree.\n");
       }
       
     }
@@ -121,16 +119,16 @@ public class JcrMigrationTabController {
     
     if (this.jcrService.getJcrSession() != null) {
       try {
-        jcrBrowserSceneController.getDebugTxt().appendText("Saving Session ... ");
+        getParent().getDebugTxt().appendText("Saving Session ... ");
         this.jcrService.save();
-        jcrBrowserSceneController.getDebugTxt().appendText("done.\n");
+        getParent().getDebugTxt().appendText("done.\n");
       }
       catch (RepositoryException ex) {
-        jcrBrowserSceneController.getDebugTxt().appendText("Saving Session failed: " + ex.getMessage() + "\n");
+        getParent().getDebugTxt().appendText("Saving Session failed: " + ex.getMessage() + "\n");
         LOG.log(Level.SEVERE, "Saving Session failed.", ex);
       }
     } else {
-      jcrBrowserSceneController.getDebugTxt().appendText("Login First.");
+      getParent().getDebugTxt().appendText("Login First.");
     }
   }
   
@@ -138,16 +136,16 @@ public class JcrMigrationTabController {
   private void discardButtonClicked(ActionEvent event) {
     if (this.jcrService.getJcrSession() != null) {
       try {
-        jcrBrowserSceneController.getDebugTxt().appendText("Discarding Session ... ");
+        getParent().getDebugTxt().appendText("Discarding Session ... ");
         this.jcrService.getJcrSession().refresh(false);
-        jcrBrowserSceneController.getDebugTxt().appendText("done.\n");
+        getParent().getDebugTxt().appendText("done.\n");
       }
       catch (RepositoryException ex) {
-        jcrBrowserSceneController.getDebugTxt().appendText("Discarding Session failed: " + ex.getMessage() + "\n");
+        getParent().getDebugTxt().appendText("Discarding Session failed: " + ex.getMessage() + "\n");
         LOG.log(Level.SEVERE, "Discarding Session failed.", ex);
       }
     } else {
-      jcrBrowserSceneController.getDebugTxt().appendText("Login First.");
+      getParent().getDebugTxt().appendText("Login First.");
     }
   }
 

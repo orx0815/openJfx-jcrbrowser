@@ -26,6 +26,7 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Value;
 import javax.jcr.ValueFormatException;
 import org.apache.jackrabbit.commons.JcrUtils;
+import org.motorbrot.javafxjcrbrowser.SceneIncludeController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -33,18 +34,22 @@ import org.springframework.stereotype.Component;
  * Changes the jcr-property table, when a Node it selected in the JcrTree
  */
 @Component
-public class JcrTreeSelectionListener implements ChangeListener<TreeItem<Node>> {
+public class JcrTreeSelectionListener extends SceneIncludeController implements ChangeListener<TreeItem<Node>> {
 
   private static final Logger LOG = Logger.getLogger(JcrTreeSelectionListener.class.getName());
   
   @Autowired
-  private JcrBrowserSceneController parent;
-  @Autowired
   private BlingTabController blingTabController;
   @Autowired
   private CsvTabController csvTabController;
-  @Autowired
+  
   private JcrPanelController jcrPanelController;
+
+  
+  public void setJcrPanelController(JcrPanelController jcrPanelController) {
+    this.jcrPanelController = jcrPanelController;
+  }
+  
           
   @Override
   public void changed(ObservableValue<? extends TreeItem<Node>> observable, TreeItem<Node> old_val, TreeItem<Node> new_val) {
@@ -68,7 +73,7 @@ public class JcrTreeSelectionListener implements ChangeListener<TreeItem<Node>> 
         if (jcrNode.hasProperty("csvBlob")) {
           Binary binary = jcrNode.getProperty("csvBlob").getBinary();
           InputStream is = binary.getStream();
-          parent.switchToTab(1);
+          getParent().switchToTab(1);
           csvTabController.loadCvsTable(is, jcrNode.getPath());
         }
       }
@@ -83,21 +88,21 @@ public class JcrTreeSelectionListener implements ChangeListener<TreeItem<Node>> 
         }
       }
       
-      parent.getRootPathField().setText(jcrNode.getPath());
+      getParent().getRootPathField().setText(jcrNode.getPath());
               
       updateNodePropertyTable(jcrNode);
     }
     catch (RepositoryException ex) {
       LOG.log(Level.SEVERE, null, ex);
-      parent.getDebugTxt().appendText(ex.getMessage()+"\n");
+      getParent().getDebugTxt().appendText(ex.getMessage()+"\n");
     }
   }
 
   private void throwImgBinarytoGui(Binary binary) throws RepositoryException {
     InputStream is = binary.getStream();
     Image image = new Image(is, 0, 200, true, false);
-    parent.getDamImageView().setImage(image);
-    parent.switchToTab(2);
+    getParent().getDamImageView().setImage(image);
+    getParent().switchToTab(2);
     blingTabController.getDisplayShelf().addImage(image);
   }
 
@@ -132,7 +137,7 @@ public class JcrTreeSelectionListener implements ChangeListener<TreeItem<Node>> 
             }
             catch (RepositoryException ex) {
               LOG.log(Level.SEVERE, null, ex);
-              parent.getDebugTxt().appendText(ex.getMessage()+"\n");
+              getParent().getDebugTxt().appendText(ex.getMessage()+"\n");
             }
           }
         }

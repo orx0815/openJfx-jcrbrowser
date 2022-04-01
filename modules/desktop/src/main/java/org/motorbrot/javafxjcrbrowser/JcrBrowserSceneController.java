@@ -21,6 +21,10 @@ import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import org.apache.jackrabbit.spi.commons.conversion.MalformedPathException;
+import org.motorbrot.javafxjcrbrowser.bling.BlingTabController;
+import org.motorbrot.javafxjcrbrowser.contentupdate.JcrMigrationTabController;
+import org.motorbrot.javafxjcrbrowser.csv.CsvTabController;
+import org.motorbrot.javafxjcrbrowser.jcrnodetree.JcrTreeSelectionListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -35,8 +39,17 @@ public class JcrBrowserSceneController {
   @Autowired
   private JcrService jcrService;
   
+  // fxml include subcontrollers
   @Autowired
   private JcrPanelController jcrPanelController;
+  @Autowired
+  private CsvTabController csvTabController;
+  @Autowired
+  private BlingTabController blingTabController;
+  @Autowired
+  private JcrMigrationTabController jcrMigrationTabController;
+  @Autowired
+  private JcrTreeSelectionListener jcrTreeSelectionListener;
   
   // Login Controls
   @FXML
@@ -81,11 +94,20 @@ public class JcrBrowserSceneController {
 //  private CsvTabController csvTabController;
 //  @FXML
 //  private BlingTabController blingTabController;
-
+  
   /**
    * The initialize method is called after all @FXML annotated members have been injected. 
    */
   public void initialize() {
+    
+    // We can't autowire parent-controller. @Lazy breaks graalvm
+    // inject this manually
+    this.jcrPanelController.setParent(this);
+    this.csvTabController.setParent(this);
+    this.blingTabController.setParent(this);
+    this.jcrMigrationTabController.setParent(this);
+    this.jcrTreeSelectionListener.setParent(this);
+
     
     // switch to tab 3
     switchToTab(2);

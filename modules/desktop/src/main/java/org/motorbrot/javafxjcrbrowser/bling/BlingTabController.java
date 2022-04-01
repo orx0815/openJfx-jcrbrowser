@@ -8,13 +8,14 @@ import javafx.scene.control.Accordion;
 import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
+import org.motorbrot.javafxjcrbrowser.SceneIncludeController;
 import org.springframework.stereotype.Component;
 
 /**
  * FXML Controller class
  */
 @Component
-public class BlingTabController {
+public class BlingTabController extends SceneIncludeController {
 
   @FXML
   private Pane shelfPane;
