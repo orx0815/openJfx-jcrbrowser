@@ -16,7 +16,7 @@ jobs:
         # GraalVM version. Default: latest
         graalvm: '22.0.0.2-Final'
         # Java version. Since GraalVM 22, either java11 or java17, before GraalVM 22, empty. Default: java17
-        jdk: 'java11'
+        jdk: 'java17'
     - run: java -version
 
     - name: APT update for Missing linker libraries

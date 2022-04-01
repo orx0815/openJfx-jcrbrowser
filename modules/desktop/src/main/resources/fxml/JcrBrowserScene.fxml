@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.motorbrot.javafxjcrbrowser.JcrBrowserSceneController">
+<VBox prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.motorbrot.javafxjcrbrowser.JcrBrowserSceneController">
   <children>
       <MenuBar>
         <menus>
@@ -147,12 +147,12 @@
                       </Tab>
                       <Tab text="Content Update Task">
                         <content>
-                          <fx:include source="AsyncContentUpdateTab.fxml" fx:id="asyncContentUpdateTab" />
+                          <fx:include fx:id="asyncContentUpdateTab" source="AsyncContentUpdateTab.fxml" />
                         </content>
                       </Tab>
                     </tabs>
                   </TabPane>
-                  <TextArea fx:id="debugTxt" editable="false" minHeight="0.0" wrapText="true" />
+                  <TextArea fx:id="debugTxt" editable="false" minHeight="0.0" styleClass="consoleGreen" wrapText="true" />
               </items>
             </SplitPane>
       </items>

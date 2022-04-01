@@ -23,8 +23,6 @@
   </dependencies>
   
   <properties>
-    <!-- jdl14 is minimum, due to jpackage -->
-    <java.version>14</java.version>
     <mainClassName>org.motorbrot.jlink.Main</mainClassName>
   </properties>
     

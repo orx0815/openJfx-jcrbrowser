@@ -1,3 +1,27 @@
 .button {
-    -fx-font-weight: bold;
+  -fx-font-weight: bold;
+}
+
+/* workaround graalvm rendering. fx-text-fill stays white in textarea so we make bg grey */
+
+.text-area {
+  -fx-highlight-fill: #00ff00;
+  -fx-highlight-text-fill: #000000;
+  -fx-text-fill: black;
+}
+
+.text-area .content {
+  -fx-background-color: grey;
+}
+
+
+.text-area.consoleGreen {
+  -fx-font-family: Consolas;
+  -fx-highlight-fill: #00ff00;
+  -fx-highlight-text-fill: #000000;
+  -fx-text-fill: #00ff00;
+}
+
+.text-area.consoleGreen .content {
+  -fx-background-color: black;
 }

@@ -11,9 +11,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1000.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.motorbrot.javafxjcrbrowser.contentupdate.JcrMigrationTabController">
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1000.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.motorbrot.javafxjcrbrowser.contentupdate.JcrMigrationTabController">
    <children>
-      <VBox prefHeight="370.0" prefWidth="710.0">
+      <VBox prefHeight="433.0" prefWidth="710.0">
          <children>
             <AnchorPane prefHeight="40.0" prefWidth="592.0">
                <children>
@@ -96,6 +96,15 @@
                         <TextField fx:id="jobNameField" prefHeight="48.0" prefWidth="162.0" text="my Job" />
                      </children>
                   </HBox>
+               </children>
+            </Pane>
+            <Pane prefHeight="64.0" prefWidth="359.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#npe" prefHeight="42.0" prefWidth="337.0" text="NPE">
+                     <padding>
+                        <Insets top="10.0" />
+                     </padding>
+                  </Button>
                </children>
             </Pane>
          </children>

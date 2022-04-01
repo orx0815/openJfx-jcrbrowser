@@ -24,7 +24,7 @@ maven-eclipse.xml
 
 /nbproject/
 /nb-configuration.xml
-/nbactions.xml
+*nbactions.xml
 /temp.txt
 /modules/desktop/target/
 /deploy/maven-shade/target/

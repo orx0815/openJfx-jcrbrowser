@@ -149,4 +149,25 @@ public class JcrMigrationTabController extends SceneIncludeController {
     }
   }
 
+  @FXML
+  private void npe(ActionEvent event) {
+
+    Java17Test java17Test = new Java17Test(123, "foo", "bar");
+
+    LOG.info("java17 !!! " + java17Test.toString());
+    LOG.info("java17 !!! " + java17Test.lastName());
+
+    Java17Test java17Test_null = new Java17Test(123, "foo", null);
+
+    try {
+      LOG.info("v-v-v java17 Meaningfull NPE in log: " + java17Test_null.lastName().toUpperCase());
+    }
+    catch (NullPointerException npe) {
+      LOG.log(Level.INFO, "Meaningful NullPointer: ", npe);
+      getParent().getDebugTxt().appendText("Meaningful NullPointerException: " + npe.getMessage());
+    }
+  }
+  
+  private record Java17Test(int id, String firstName, String lastName){}
+
 }

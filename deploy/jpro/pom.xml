@@ -14,7 +14,7 @@
   </parent>
   
   <properties>
-    <jpro.version>2021.2.0</jpro.version>
+    <jpro.version>2022.1.0</jpro.version>
     <mainClassName>org.motorbrot.javafxjcrbrowser.JavaFxJcrBrowserApplication</mainClassName>
   </properties>
   
