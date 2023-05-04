@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    runs-on: macOS-latest
+    runs-on: macOS-12
     steps:
     - uses: actions/checkout@v3
     - uses: gluonhq/setup-graalvm@master
@@ -17,8 +17,14 @@ jobs:
         graalvm: '22.1.0.1-Final'
         # Java version. Since GraalVM 22, either java11 or java17, before GraalVM 22, empty. Default: java17
         jdk: 'java17'
+
     - run: java -version
     
+    - name: Set up Maven
+      uses: stCarolas/setup-maven@v4.5
+      with:
+        maven-version: 3.8.8
+        
     - name: build modules
       run: mvn -P fast install
       
