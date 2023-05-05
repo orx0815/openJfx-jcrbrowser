@@ -105,10 +105,12 @@
     <dependency>
 			<groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter</artifactId>
+        <scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
+      <scope>compile</scope>
 		</dependency>
     
     <!-- JCR and jackrabbit-jcr2dav -->    
@@ -130,22 +132,26 @@
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
       <version>${openjfx.version}</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
       <version>${openjfx.version}</version>
+      <scope>compile</scope>
     </dependency>
 
     <!-- for the application itself -->
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-csv</artifactId>
       <version>1.8</version>
+      <scope>compile</scope>
     </dependency>
     
     <!-- Tests -->
