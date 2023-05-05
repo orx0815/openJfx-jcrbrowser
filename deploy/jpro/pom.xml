@@ -14,7 +14,7 @@
   </parent>
   
   <properties>
-    <jpro.version>2022.1.0</jpro.version>
+    <jpro.version>2023.1.0</jpro.version>
     <mainClassName>org.motorbrot.javafxjcrbrowser.JavaFxJcrBrowserApplication</mainClassName>
   </properties>
   
@@ -35,7 +35,7 @@
     <plugins>
       <!--  'mvn jpro:run' -->
       <plugin>
-        <groupId>com.sandec.jpro</groupId>
+        <groupId>one.jpro</groupId>
         <artifactId>jpro-maven-plugin</artifactId>
         <version>${jpro.version}</version>
         <configuration>
