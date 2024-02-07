@@ -24,12 +24,14 @@
     <dependency>
       <groupId>org.motorbrot</groupId>
       <artifactId>openjfx-jcr-browser.desktop</artifactId>
+      <scope>compile</scope>
       <version>1.0.0-SNAPSHOT</version>
     </dependency>
         
     <dependency>
       <groupId>org.springframework.experimental</groupId>
       <artifactId>spring-native</artifactId>
+      <scope>compile</scope>
       <version>0.11.3</version>
     </dependency>
          
@@ -142,15 +144,21 @@
         </plugins>
       </build>
       <repositories>
+        <!-- for experimental spring-aot-maven-plugin -->
         <repository>
-          <id>SpringIo Release Repository</id>
-          <url>https://repo.spring.io/release</url>
+          <id>SpringIo Milestones Repository</id>
+          <url>https://repo.spring.io/milestone</url>
+        </repository>
+        <!-- for experimental spring-native -->
+        <repository>
+          <id>SpringIo Lib-Milestones Repository</id>
+          <url>https://repo.spring.io/libs-milestone</url>
         </repository>
       </repositories>
       <pluginRepositories>
         <pluginRepository>
-          <id>SpringIo Release Repository</id>
-          <url>https://repo.spring.io/release</url>
+          <id>SpringIo Milestones Repository</id>
+          <url>https://repo.spring.io/milestone</url>
         </pluginRepository>
       </pluginRepositories>
   
