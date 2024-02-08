@@ -18,6 +18,7 @@
     <dependency>
       <groupId>org.motorbrot</groupId>
       <artifactId>openjfx-jcr-browser.desktop</artifactId>
+      <scope>compile</scope>
       <version>1.0.0-SNAPSHOT</version>
     </dependency>
     
@@ -25,18 +26,21 @@
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-base</artifactId>
+      <scope>compile</scope>
       <version>${openjfx.version}</version>
       <classifier>win</classifier>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-base</artifactId>
+      <scope>compile</scope>
       <version>${openjfx.version}</version>
       <classifier>linux</classifier>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-base</artifactId>
+      <scope>compile</scope>
       <version>${openjfx.version}</version>
       <classifier>mac</classifier>
     </dependency>
@@ -44,18 +48,21 @@
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
+      <scope>compile</scope>
       <version>${openjfx.version}</version>
       <classifier>win</classifier>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
+      <scope>compile</scope>
       <version>${openjfx.version}</version>
       <classifier>linux</classifier>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
+      <scope>compile</scope>
       <version>${openjfx.version}</version>
       <classifier>mac</classifier>
     </dependency>
@@ -63,18 +70,21 @@
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-graphics</artifactId>
+      <scope>compile</scope>
       <version>${openjfx.version}</version>
       <classifier>win</classifier>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-graphics</artifactId>
+      <scope>compile</scope>
       <version>${openjfx.version}</version>
       <classifier>linux</classifier>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-graphics</artifactId>
+      <scope>compile</scope>
       <version>${openjfx.version}</version>
       <classifier>mac</classifier>
     </dependency>
@@ -82,18 +92,21 @@
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
+      <scope>compile</scope>
       <version>${openjfx.version}</version>
       <classifier>win</classifier>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
+      <scope>compile</scope>
       <version>${openjfx.version}</version>
       <classifier>linux</classifier>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
+      <scope>compile</scope>
       <version>${openjfx.version}</version>
       <classifier>mac</classifier>
     </dependency>

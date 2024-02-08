@@ -1,8 +1,12 @@
-# This workflow will build a .deb installer
+# This workflow will build a jpro-server and a webstart zip with signed jars and jnlp stub
 name: Web-based deployments, JNLP/JPRO
 
 on:
-  workflow_dispatch
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -10,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Set up JDK 17
       uses: actions/setup-java@v1
       with:
@@ -29,7 +33,7 @@ jobs:
     - name: Copy webstart-zip to staging
       run: cp -r ./deploy/webstart/target/*.zip webstart-staging
     - name: Upload
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4.3.1
       with:
         name: webstart zip (needs edit of jnlp inside)
         path: webstart-staging
@@ -42,7 +46,7 @@ jobs:
     - name: Copy jpro-zip to staging  
       run: cp -r ./deploy/jpro/target/*.zip jpro-staging
     - name: Upload
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4.3.1
       with:
         name: jpro-server zip
         path: jpro-staging

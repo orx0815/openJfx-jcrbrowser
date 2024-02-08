@@ -1,13 +1,17 @@
 name: Linux BIN
 
 on:
-  workflow_dispatch
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - uses: gluonhq/setup-graalvm@master
       # set GITHUB_TOKEN to avoid exceeding GitHub's API rate limit
       env:
@@ -37,7 +41,7 @@ jobs:
     - name: Copy native client to staging
       run: cp -r ./deploy/graalvm/target/gluonfx/x86_64-linux/OpenJfxJcrBrowser* staging
     - name: Upload
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4.3.1
       with:
         name: linux_binary
         path: staging
